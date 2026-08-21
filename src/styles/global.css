@@ -1,0 +1,333 @@
+/* ==========================================================================
+   TG Visuals — Design system
+   Deep black · rich crimson · white. Editorial, cinematic, intentional.
+   ========================================================================== */
+
+/* Self-hosted fonts (no external requests) */
+@import '@fontsource-variable/space-grotesk';
+@import '@fontsource-variable/inter';
+@import '@fontsource/instrument-serif';
+
+/* --------------------------------------------------------------------------
+   Tokens
+   -------------------------------------------------------------------------- */
+:root {
+  /* Light editorial theme — white paper, black ink, one red accent.
+     Colour comes from the photography/video and the red About chapter. */
+  --paper: #ffffff;        /* page background (white) */
+  --paper-2: #f6f4f1;      /* subtle off-white surface */
+  --ink: #101012;          /* primary black — text & dark surfaces */
+  --ink-900: #0a0a0b;      /* near-pure black for the black CTA / footer */
+  --charcoal: #eceae6;     /* light neutral (media placeholder / raised) */
+  --charcoal-2: #e3e1dc;   /* hairline light surface */
+  --smoke: #4a4a4f;        /* muted body text on white */
+  --smoke-dim: #8a8a90;    /* captions / meta */
+  --line: rgba(16, 16, 18, 0.16);
+  --line-soft: rgba(16, 16, 18, 0.08);
+
+  --white: #ffffff;        /* light — for text/marks on dark or red surfaces */
+  --pure: #ffffff;
+
+  /* Crimson accent — used sparingly; bold only in the About chapter */
+  --red: #d81e34;          /* primary accent */
+  --red-bright: #f0233b;
+  --red-600: #b21526;
+  --red-800: #6d0e18;
+  --red-900: #3a0a10;      /* deep maroon */
+
+  /* No decorative gradient backgrounds — flat, editorial.
+     Legacy glow references resolve to transparent / flat black. */
+  --grad-crimson: var(--ink-900);
+  --grad-crimson-soft: transparent;
+  --grad-ember: var(--ink-900);
+
+  /* Inverted-surface text tokens (black or red sections) */
+  --on-dark: #f4f2ef;
+  --on-dark-dim: rgba(255, 255, 255, 0.62);
+
+  /* Type */
+  --font-display: 'Space Grotesk Variable', 'Space Grotesk', system-ui, sans-serif;
+  --font-body: 'Inter Variable', 'Inter', system-ui, -apple-system, sans-serif;
+  --font-serif: 'Instrument Serif', Georgia, 'Times New Roman', serif;
+
+  /* Fluid type scale (min 320px → max 1600px) */
+  --step--1: clamp(0.80rem, 0.76rem + 0.18vw, 0.92rem);
+  --step-0:  clamp(1.00rem, 0.95rem + 0.25vw, 1.15rem);
+  --step-1:  clamp(1.25rem, 1.13rem + 0.55vw, 1.65rem);
+  --step-2:  clamp(1.70rem, 1.44rem + 1.15vw, 2.60rem);
+  --step-3:  clamp(2.30rem, 1.75rem + 2.45vw, 4.20rem);
+  --step-4:  clamp(3.00rem, 1.90rem + 4.90vw, 6.50rem);
+  --step-5:  clamp(3.60rem, 1.60rem + 8.90vw, 9.50rem);
+
+  /* Spacing rhythm */
+  --space-2xs: clamp(0.5rem, 0.45rem + 0.25vw, 0.75rem);
+  --space-xs:  clamp(0.75rem, 0.65rem + 0.5vw, 1.1rem);
+  --space-s:   clamp(1rem, 0.85rem + 0.75vw, 1.6rem);
+  --space-m:   clamp(1.6rem, 1.3rem + 1.5vw, 2.8rem);
+  --space-l:   clamp(2.6rem, 2rem + 3vw, 5rem);
+  --space-xl:  clamp(4rem, 2.8rem + 6vw, 9rem);
+  --space-2xl: clamp(6rem, 4rem + 10vw, 14rem);
+
+  --container: 1520px;
+  --container-narrow: 900px;
+  --gutter: clamp(1.25rem, 0.8rem + 2.2vw, 3.5rem);
+
+  --radius: 2px;           /* sharp & editorial, not bubbly */
+  --radius-media: 4px;
+
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --dur: 0.6s;
+
+  --nav-h: 72px;
+}
+
+/* --------------------------------------------------------------------------
+   Reset & base
+   -------------------------------------------------------------------------- */
+*,
+*::before,
+*::after { box-sizing: border-box; }
+
+* { margin: 0; }
+
+html {
+  -webkit-text-size-adjust: 100%;
+  scroll-behavior: smooth;
+  scroll-padding-top: var(--nav-h);
+}
+
+body {
+  font-family: var(--font-body);
+  font-size: var(--step-0);
+  line-height: 1.6;
+  color: var(--ink);
+  background: var(--paper);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  font-synthesis: none;
+  overflow-x: hidden;
+}
+
+img, picture, video, canvas, svg {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+input, button, textarea, select { font: inherit; color: inherit; }
+
+a { color: inherit; text-decoration: none; }
+
+h1, h2, h3, h4 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  line-height: 1.02;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+}
+
+::selection {
+  background: var(--red);
+  color: var(--pure);
+}
+
+:focus-visible {
+  outline: 2px solid var(--red);
+  outline-offset: 3px;
+  border-radius: 1px;
+}
+
+/* --------------------------------------------------------------------------
+   Layout primitives
+   -------------------------------------------------------------------------- */
+.container {
+  width: 100%;
+  max-width: var(--container);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+.container--narrow { max-width: var(--container-narrow); }
+
+.section { padding-block: var(--space-2xl); }
+.section--tight { padding-block: var(--space-xl); }
+
+.stack > * + * { margin-top: var(--flow, 1em); }
+
+/* Section eyebrow / index label */
+.eyebrow {
+  font-family: var(--font-display);
+  font-size: var(--step--1);
+  font-weight: 500;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--smoke-dim);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75em;
+}
+.eyebrow::before {
+  content: '';
+  width: 1.75em;
+  height: 1px;
+  background: var(--red);
+}
+
+.display {
+  font-family: var(--font-display);
+  font-size: var(--step-4);
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  line-height: 0.98;
+}
+
+.lede {
+  font-size: var(--step-1);
+  line-height: 1.4;
+  color: var(--white);
+  max-width: 46ch;
+  letter-spacing: -0.01em;
+}
+
+.muted { color: var(--smoke); }
+/* Editorial italic serif accent — a type contrast, not a colour accent
+   (red is reserved for the About chapter and micro-accents). */
+.serif-accent {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: 0;
+  color: inherit;
+}
+
+.text-red { color: var(--red); }
+
+/* --------------------------------------------------------------------------
+   Buttons / links
+   -------------------------------------------------------------------------- */
+.btn {
+  --btn-fg: var(--paper);
+  --btn-bg: var(--ink);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6em;
+  padding: 0.9em 1.6em;
+  font-family: var(--font-display);
+  font-size: var(--step--1);
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  color: var(--btn-fg);
+  background: var(--btn-bg);
+  border: 1px solid transparent;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: transform var(--dur) var(--ease), background var(--dur) var(--ease),
+    color var(--dur) var(--ease), border-color var(--dur) var(--ease);
+  will-change: transform;
+}
+.btn:hover { transform: translateY(-2px); }
+.btn .btn__arrow { transition: transform var(--dur) var(--ease); }
+.btn:hover .btn__arrow { transform: translate(3px, -3px); }
+
+.btn--red { --btn-bg: var(--red); --btn-fg: var(--pure); }
+.btn--red:hover { --btn-bg: var(--red-bright); }
+
+.btn--ghost {
+  --btn-bg: transparent;
+  --btn-fg: var(--ink);
+  border-color: var(--line);
+}
+.btn--ghost:hover { border-color: var(--ink); }
+
+/* Light variants for use on dark / red surfaces */
+.btn--light { --btn-bg: var(--paper); --btn-fg: var(--ink); }
+.btn--light:hover { --btn-bg: #ffffff; }
+.btn--outline-light {
+  --btn-bg: transparent;
+  --btn-fg: var(--white);
+  border-color: rgba(255, 255, 255, 0.4);
+}
+.btn--outline-light:hover { border-color: rgba(255, 255, 255, 0.9); }
+
+/* Underline link with a wiping fill */
+.link-underline {
+  position: relative;
+  font-family: var(--font-display);
+  font-size: var(--step--1);
+  letter-spacing: 0.02em;
+  padding-bottom: 2px;
+}
+.link-underline::after {
+  content: '';
+  position: absolute;
+  left: 0; bottom: 0;
+  width: 100%; height: 1px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform var(--dur) var(--ease);
+}
+.link-underline:hover::after { transform: scaleX(1); transform-origin: left; }
+
+/* --------------------------------------------------------------------------
+   Motion — reveal on scroll (respecting reduced motion)
+   -------------------------------------------------------------------------- */
+[data-reveal] {
+  opacity: 0;
+  transform: translateY(22px);
+  transition: opacity 0.9s var(--ease-out), transform 0.9s var(--ease-out);
+  transition-delay: var(--reveal-delay, 0s);
+}
+[data-reveal].is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+  [data-reveal] { opacity: 1; transform: none; }
+}
+
+/* --------------------------------------------------------------------------
+   Utilities
+   -------------------------------------------------------------------------- */
+.visually-hidden {
+  position: absolute !important;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0 0 0 0);
+  white-space: nowrap; border: 0;
+}
+
+.skip-link {
+  position: fixed;
+  top: -100%;
+  left: 1rem;
+  z-index: 200;
+  background: var(--ink);
+  color: var(--paper);
+  padding: 0.7em 1.1em;
+  border-radius: var(--radius);
+  font-family: var(--font-display);
+  font-size: var(--step--1);
+}
+.skip-link:focus { top: 1rem; }
+
+.grain::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0.035;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}

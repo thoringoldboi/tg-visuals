@@ -1,0 +1,67 @@
+---
+import { Image } from 'astro:assets';
+import markDark from '../assets/brand/tg-mark-dark.png';
+import markWhite from '../assets/brand/tg-mark-white.png';
+
+interface Props {
+  /** Show the "TG VISUALS" wordmark beside the mark. */
+  wordmark?: boolean;
+  /** 'dark' = black mark for light surfaces; 'light' = white mark for dark/red surfaces. */
+  variant?: 'dark' | 'light';
+  class?: string;
+}
+const { wordmark = true, variant = 'dark', class: className = '' } = Astro.props;
+const mark = variant === 'light' ? markWhite : markDark;
+---
+
+<a
+  href="/"
+  class:list={['logo', `logo--${variant}`, className]}
+  aria-label="TG Visuals — home"
+>
+  <Image src={mark} alt="" width={506} densities={[1, 2]} class="logo__mark" loading="eager" />
+  {
+    wordmark && (
+      <span class="logo__word">
+        <span class="logo__word-tg">TG</span>
+        <span class="logo__word-v">Visuals</span>
+      </span>
+    )
+  }
+</a>
+
+<style>
+  .logo {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.7em;
+    line-height: 1;
+  }
+  .logo__mark {
+    width: auto;
+    height: 1.9em;
+    transition: transform var(--dur) var(--ease);
+  }
+  .logo:hover .logo__mark {
+    transform: rotate(-3deg) scale(1.04);
+  }
+  .logo__word {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 0.4em;
+    font-family: var(--font-display);
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    font-size: 1.05rem;
+  }
+  .logo--dark .logo__word-tg { color: var(--ink); }
+  .logo--light .logo__word-tg { color: var(--white); }
+  .logo__word-v {
+    color: var(--smoke-dim);
+    font-weight: 500;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    font-size: 0.72em;
+  }
+  .logo--light .logo__word-v { color: rgba(255, 255, 255, 0.6); }
+</style>

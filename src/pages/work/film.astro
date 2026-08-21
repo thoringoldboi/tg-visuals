@@ -1,0 +1,124 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageHeader from '../../components/PageHeader.astro';
+import FilmCard from '../../components/FilmCard.astro';
+import { films } from '../../data/work';
+
+const categories = ['All', ...Array.from(new Set(films.map((f) => f.category)))];
+---
+
+<BaseLayout
+  title="Film & Video"
+  description="Cinematic films, commercial work, music videos and promos by TG Visuals."
+>
+  <PageHeader
+    eyebrow="Film & Video"
+    title="Cinematic &amp; commercial work"
+    intro="Horizontal, story-led productions — from brand films and commercials to music videos and promos. Handled end to end: concept, shoot, edit and colour."
+  />
+
+  <section class="section--tight">
+    <div class="container">
+      <div class="filter" role="tablist" aria-label="Filter films by category">
+        {
+          categories.map((cat, i) => (
+            <button
+              class:list={['filter__btn', { 'is-active': i === 0 }]}
+              data-filter={cat}
+              role="tab"
+              aria-selected={i === 0 ? 'true' : 'false'}
+            >
+              {cat}
+            </button>
+          ))
+        }
+      </div>
+
+      <div class="film-list" data-film-list>
+        {
+          films.map((film, i) => (
+            <div class="film-list__item" data-category={film.category}>
+              <FilmCard film={film} index={i + 1} sizes="(max-width: 720px) 100vw, 50vw" />
+            </div>
+          ))
+        }
+      </div>
+      <p class="film-list__empty" data-empty hidden>No projects in this category yet.</p>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .filter {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6em;
+    margin-bottom: var(--space-l);
+    padding-bottom: var(--space-s);
+    border-bottom: 1px solid var(--line-soft);
+  }
+  .filter__btn {
+    font-family: var(--font-display);
+    font-size: 0.9rem;
+    letter-spacing: 0.01em;
+    color: var(--smoke);
+    background: transparent;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 0.55em 1.2em;
+    cursor: pointer;
+    transition: color var(--dur) var(--ease), background var(--dur) var(--ease),
+      border-color var(--dur) var(--ease);
+  }
+  .filter__btn:hover {
+    color: var(--ink);
+    border-color: var(--ink);
+  }
+  .filter__btn.is-active {
+    color: var(--pure);
+    background: var(--red);
+    border-color: var(--red);
+  }
+  .film-list {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-m) var(--space-s);
+  }
+  .film-list__item.is-hidden {
+    display: none;
+  }
+  .film-list__empty {
+    color: var(--smoke-dim);
+    padding-block: var(--space-l);
+    text-align: center;
+  }
+  @media (max-width: 720px) {
+    .film-list {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+
+<script>
+  const buttons = document.querySelectorAll<HTMLButtonElement>('.filter__btn');
+  const items = document.querySelectorAll<HTMLElement>('.film-list__item');
+  const empty = document.querySelector<HTMLElement>('[data-empty]');
+
+  buttons.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const cat = btn.dataset.filter;
+      buttons.forEach((b) => {
+        const active = b === btn;
+        b.classList.toggle('is-active', active);
+        b.setAttribute('aria-selected', String(active));
+      });
+      let shown = 0;
+      items.forEach((item) => {
+        const match = cat === 'All' || item.dataset.category === cat;
+        item.classList.toggle('is-hidden', !match);
+        if (match) shown++;
+      });
+      if (empty) empty.hidden = shown !== 0;
+    });
+  });
+</script>

@@ -1,0 +1,52 @@
+---
+interface Props {
+  eyebrow?: string;
+  title: string;
+  intro?: string;
+  /** Show the crimson glow wash behind the header. */
+  glow?: boolean;
+}
+const { eyebrow, title, intro, glow = true } = Astro.props;
+---
+
+<header class:list={['page-header', { 'page-header--glow': glow }]}>
+  {glow && <div class="page-header__glow" aria-hidden="true" />}
+  <div class="container">
+    {eyebrow && <p class="eyebrow" data-reveal>{eyebrow}</p>}
+    <h1 class="page-header__title" data-reveal style="--reveal-delay:.05s" set:html={title} />
+    {
+      intro && (
+        <p class="page-header__intro lede" data-reveal style="--reveal-delay:.1s">
+          {intro}
+        </p>
+      )
+    }
+  </div>
+</header>
+
+<style>
+  .page-header {
+    position: relative;
+    padding-top: calc(var(--nav-h) + var(--space-xl));
+    padding-bottom: var(--space-l);
+    overflow: hidden;
+  }
+  .page-header__glow {
+    position: absolute;
+    inset: 0;
+    background: var(--grad-crimson-soft);
+    z-index: -1;
+    pointer-events: none;
+  }
+  .page-header__title {
+    font-size: var(--step-4);
+    letter-spacing: -0.035em;
+    max-width: 16ch;
+    margin-top: 0.3em;
+  }
+  .page-header__intro {
+    margin-top: 1.2em;
+    color: var(--smoke);
+    max-width: 52ch;
+  }
+</style>

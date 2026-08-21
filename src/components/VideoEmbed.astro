@@ -1,0 +1,152 @@
+---
+import { Image } from 'astro:assets';
+import { img } from '../data/work';
+
+interface Props {
+  cover: string;
+  /** YouTube/Vimeo URL. Empty => poster-only placeholder. */
+  url?: string;
+  label?: string;
+  eager?: boolean;
+  /** Aspect ratio, e.g. '16 / 9' or '9 / 16'. */
+  ratio?: string;
+  sizes?: string;
+}
+const {
+  cover,
+  url = '',
+  label = 'Play showreel',
+  eager = false,
+  ratio = '16 / 9',
+  sizes = '100vw',
+} = Astro.props;
+
+const poster = img(cover);
+
+// Build a privacy-friendly, click-to-load embed URL.
+function embedSrc(u: string): string | null {
+  try {
+    const parsed = new URL(u);
+    if (parsed.hostname.includes('youtube') || parsed.hostname.includes('youtu.be')) {
+      const id = parsed.hostname.includes('youtu.be')
+        ? parsed.pathname.slice(1)
+        : parsed.searchParams.get('v');
+      return id ? `https://www.youtube-nocookie.com/embed/${id}?autoplay=1&rel=0` : null;
+    }
+    if (parsed.hostname.includes('vimeo')) {
+      const id = parsed.pathname.split('/').filter(Boolean).pop();
+      return id ? `https://player.vimeo.com/video/${id}?autoplay=1` : null;
+    }
+  } catch {
+    return null;
+  }
+  return null;
+}
+const src = url ? embedSrc(url) : null;
+---
+
+<div class="embed" style={`--ratio:${ratio}`} data-embed data-src={src ?? ''}>
+  <Image
+    src={poster}
+    alt={label}
+    class="embed__poster"
+    widths={[480, 800, 1200, 1600]}
+    sizes={sizes}
+    loading={eager ? 'eager' : 'lazy'}
+  />
+  <button class="embed__play" type="button" aria-label={label}>
+    <span class="embed__play-icon" aria-hidden="true">
+      <svg viewBox="0 0 24 24" width="26" height="26" fill="currentColor"><path d="M8 5v14l11-7z" /></svg>
+    </span>
+    <span class="embed__play-label">{src ? label : 'Preview coming soon'}</span>
+  </button>
+</div>
+
+<style>
+  .embed {
+    position: relative;
+    aspect-ratio: var(--ratio);
+    overflow: hidden;
+    border-radius: var(--radius-media);
+    background: var(--charcoal);
+    isolation: isolate;
+  }
+  .embed__poster {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 1.2s var(--ease), filter 0.8s var(--ease);
+  }
+  .embed:hover .embed__poster {
+    transform: scale(1.04);
+    filter: brightness(0.86);
+  }
+  .embed__play {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1em;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--white);
+  }
+  .embed__play-icon {
+    display: grid;
+    place-items: center;
+    width: clamp(64px, 8vw, 92px);
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background: var(--red);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.28);
+    transform: translateZ(0);
+    transition: transform var(--dur) var(--ease), background var(--dur) var(--ease);
+    padding-left: 3px;
+  }
+  .embed__play:hover .embed__play-icon {
+    transform: scale(1.08);
+    background: var(--red-bright);
+  }
+  .embed__play-label {
+    font-family: var(--font-display);
+    font-size: 0.8rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--white);
+    opacity: 0.9;
+  }
+  .embed[data-playing] .embed__poster,
+  .embed[data-playing] .embed__play {
+    display: none;
+  }
+  .embed iframe {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+  }
+</style>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-embed]').forEach((el) => {
+    const btn = el.querySelector('button');
+    const src = el.dataset.src;
+    if (!src) return; // poster-only placeholder
+    btn?.addEventListener('click', () => {
+      const iframe = document.createElement('iframe');
+      iframe.src = src;
+      iframe.allow =
+        'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen';
+      iframe.setAttribute('allowfullscreen', '');
+      iframe.title = btn.getAttribute('aria-label') || 'Video';
+      el.appendChild(iframe);
+      el.setAttribute('data-playing', '');
+    });
+  });
+</script>

@@ -1,0 +1,141 @@
+---
+import { Image } from 'astro:assets';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageHeader from '../../components/PageHeader.astro';
+import { social, img } from '../../data/work';
+---
+
+<BaseLayout
+  title="Social Content"
+  description="Vertical short-form content — Instagram Reels, TikTok and commercial social by TG Visuals."
+>
+  <PageHeader
+    eyebrow="Social Content"
+    title="Short-form, built to perform"
+    intro="Vertical content shot and cut for the feed — Instagram Reels, TikTok and short commercial spots designed to stop the scroll."
+  />
+
+  <section class="section--tight">
+    <div class="container">
+      <div class="social-grid">
+        {
+          social.map((clip, i) => {
+            const Tag = clip.url ? 'a' : 'div';
+            return (
+              <Tag
+                class="social-card"
+                data-reveal
+                style={`--reveal-delay:${(i % 4) * 0.05}s`}
+                {...(clip.url ? { href: clip.url, target: '_blank', rel: 'noopener' } : {})}
+              >
+                <div class="social-card__media">
+                  <Image
+                    src={img(clip.cover)}
+                    alt={`${clip.title} — ${clip.platform} ${clip.format}`}
+                    widths={[300, 500, 720]}
+                    sizes="(max-width: 560px) 50vw, (max-width: 900px) 33vw, 25vw"
+                    class="social-card__img"
+                  />
+                  <span class="social-card__platform">{clip.platform}</span>
+                  <span class="social-card__play" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M8 5v14l11-7z" /></svg>
+                  </span>
+                </div>
+                <div class="social-card__meta">
+                  <span class="social-card__title">{clip.title}</span>
+                  <span class="social-card__format">{clip.format}</span>
+                </div>
+              </Tag>
+            );
+          })
+        }
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .social-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--space-m) var(--space-s);
+  }
+  .social-card {
+    display: block;
+    color: inherit;
+  }
+  .social-card__media {
+    position: relative;
+    aspect-ratio: 9 / 16;
+    overflow: hidden;
+    border-radius: var(--radius-media);
+    background: var(--charcoal);
+  }
+  .social-card__img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 1s var(--ease), filter 0.6s var(--ease);
+  }
+  .social-card:hover .social-card__img {
+    transform: scale(1.05);
+    filter: brightness(0.8);
+  }
+  .social-card__platform {
+    position: absolute;
+    top: 0.8rem;
+    left: 0.8rem;
+    font-family: var(--font-display);
+    font-size: 0.66rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--white);
+    background: color-mix(in srgb, var(--ink) 55%, transparent);
+    backdrop-filter: blur(6px);
+    border: 1px solid var(--line);
+    padding: 0.4em 0.7em;
+    border-radius: 999px;
+  }
+  .social-card__play {
+    position: absolute;
+    inset: 0;
+    margin: auto;
+    width: 54px;
+    height: 54px;
+    display: grid;
+    place-items: center;
+    padding-left: 3px;
+    border-radius: 50%;
+    background: color-mix(in srgb, var(--red) 90%, transparent);
+    color: var(--pure);
+    opacity: 0;
+    transform: scale(0.85);
+    transition: opacity var(--dur) var(--ease), transform var(--dur) var(--ease);
+  }
+  .social-card:hover .social-card__play {
+    opacity: 1;
+    transform: scale(1);
+  }
+  .social-card__meta {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--space-s);
+    margin-top: 0.9em;
+  }
+  .social-card__title {
+    font-family: var(--font-display);
+    font-weight: 500;
+    letter-spacing: -0.01em;
+  }
+  .social-card__format {
+    font-size: var(--step--1);
+    color: var(--smoke-dim);
+  }
+  @media (max-width: 900px) {
+    .social-grid { grid-template-columns: repeat(3, 1fr); }
+  }
+  @media (max-width: 640px) {
+    .social-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+</style>

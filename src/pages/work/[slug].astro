@@ -1,0 +1,201 @@
+---
+import { Image } from 'astro:assets';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import VideoEmbed from '../../components/VideoEmbed.astro';
+import { films, img } from '../../data/work';
+
+export function getStaticPaths() {
+  return films.map((film, i) => {
+    const next = films[(i + 1) % films.length];
+    return { params: { slug: film.slug }, props: { film, next } };
+  });
+}
+
+const { film, next } = Astro.props;
+const meta = [
+  { label: 'Client', value: film.client },
+  { label: 'Category', value: film.category },
+  { label: 'Year', value: String(film.year) },
+  ...(film.location ? [{ label: 'Location', value: film.location }] : []),
+  { label: 'Role', value: film.roles.join(', ') },
+];
+---
+
+<BaseLayout title={film.title} description={film.summary}>
+  <article class="project">
+    <header class="project__header">
+      <div class="project__header-glow" aria-hidden="true"></div>
+      <div class="container">
+        <a href="/work/film" class="project__back link-underline">← Film &amp; Video</a>
+        <p class="eyebrow" data-reveal>{film.category}</p>
+        <h1 class="project__title" data-reveal style="--reveal-delay:.05s">{film.title}</h1>
+        <p class="project__summary lede" data-reveal style="--reveal-delay:.1s">{film.summary}</p>
+      </div>
+    </header>
+
+    <div class="container">
+      <div class="project__reel" data-reveal>
+        <VideoEmbed
+          cover={film.cover}
+          url={film.videoUrl}
+          label={`Play ${film.title}`}
+          eager
+          sizes="(max-width: 1520px) 100vw, 1520px"
+        />
+      </div>
+
+      <div class="project__body">
+        <aside class="project__meta" data-reveal>
+          <dl>
+            {
+              meta.map((m) => (
+                <div class="project__meta-row">
+                  <dt>{m.label}</dt>
+                  <dd>{m.value}</dd>
+                </div>
+              ))
+            }
+          </dl>
+        </aside>
+        <div class="project__copy" data-reveal style="--reveal-delay:.06s">
+          {film.body.map((p) => <p>{p}</p>)}
+        </div>
+      </div>
+
+      {
+        film.gallery.length > 0 && (
+          <section class="project__gallery">
+            {film.gallery.map((name, i) => (
+              <figure class:list={['project__shot', { 'project__shot--wide': i % 3 === 0 }]} data-reveal>
+                <Image
+                  src={img(name)}
+                  alt={`${film.title} — still ${i + 1}`}
+                  widths={[600, 1000, 1600]}
+                  sizes="(max-width: 900px) 100vw, 60vw"
+                  class="project__shot-img"
+                />
+              </figure>
+            ))}
+          </section>
+        )
+      }
+    </div>
+
+    <a href={`/work/${next.slug}`} class="project__next">
+      <div class="project__next-media">
+        <Image src={img(next.cover)} alt="" widths={[800, 1400]} sizes="100vw" class="project__next-img" />
+      </div>
+      <div class="container project__next-inner">
+        <span class="eyebrow">Next project</span>
+        <span class="project__next-title">{next.title} <span aria-hidden="true">↗</span></span>
+      </div>
+    </a>
+  </article>
+</BaseLayout>
+
+<style>
+  .project__header {
+    position: relative;
+    padding-top: calc(var(--nav-h) + var(--space-l));
+    padding-bottom: var(--space-l);
+    overflow: hidden;
+  }
+  .project__header-glow {
+    position: absolute;
+    inset: 0;
+    background: var(--grad-crimson-soft);
+    z-index: -1;
+  }
+  .project__back {
+    display: inline-block;
+    color: var(--smoke);
+    margin-bottom: var(--space-m);
+  }
+  .project__back:hover { color: var(--ink); }
+  .project__title {
+    font-size: var(--step-5);
+    letter-spacing: -0.04em;
+    line-height: 0.92;
+    margin: 0.15em 0 0.35em;
+  }
+  .project__summary {
+    color: var(--smoke);
+    max-width: 48ch;
+  }
+  .project__reel { margin-bottom: var(--space-l); }
+
+  .project__body {
+    display: grid;
+    grid-template-columns: 0.9fr 1.6fr;
+    gap: var(--space-l);
+    padding-block: var(--space-m) var(--space-xl);
+    border-bottom: 1px solid var(--line-soft);
+  }
+  .project__meta dl { display: grid; gap: 0; }
+  .project__meta-row {
+    display: flex;
+    justify-content: space-between;
+    gap: var(--space-s);
+    padding-block: 0.9em;
+    border-top: 1px solid var(--line-soft);
+  }
+  .project__meta-row:last-child { border-bottom: 1px solid var(--line-soft); }
+  .project__meta dt {
+    font-family: var(--font-display);
+    font-size: 0.78rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--smoke-dim);
+  }
+  .project__meta dd { text-align: right; color: var(--ink); }
+  .project__copy p {
+    font-size: var(--step-1);
+    line-height: 1.5;
+    color: var(--smoke);
+    max-width: 60ch;
+  }
+  .project__copy p + p { margin-top: 1.2em; }
+
+  .project__gallery {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-s);
+    padding-block: var(--space-xl);
+  }
+  .project__shot {
+    border-radius: var(--radius-media);
+    overflow: hidden;
+    background: var(--charcoal);
+  }
+  .project__shot--wide { grid-column: 1 / -1; }
+  .project__shot-img { width: 100%; height: 100%; object-fit: cover; }
+
+  .project__next {
+    position: relative;
+    display: block;
+    min-height: 42vh;
+    display: grid;
+    align-items: center;
+    overflow: hidden;
+    border-top: 1px solid var(--line-soft);
+  }
+  .project__next-media { position: absolute; inset: 0; z-index: -1; }
+  .project__next-img {
+    width: 100%; height: 100%; object-fit: cover;
+    filter: brightness(0.4);
+    transition: transform 1.2s var(--ease), filter 0.8s var(--ease);
+  }
+  .project__next:hover .project__next-img { transform: scale(1.05); filter: brightness(0.5); }
+  .project__next-inner { display: grid; gap: 0.4em; text-align: center; justify-items: center; }
+  .project__next-title {
+    font-family: var(--font-display);
+    font-size: var(--step-4);
+    font-weight: 600;
+    letter-spacing: -0.03em;
+  }
+
+  @media (max-width: 900px) {
+    .project__body { grid-template-columns: 1fr; gap: var(--space-m); }
+    .project__gallery { grid-template-columns: 1fr; }
+  }
+</style>

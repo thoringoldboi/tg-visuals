@@ -1,0 +1,304 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { contact } from '../config/site';
+
+const whatsappUrl = contact.whatsapp ? `https://wa.me/${contact.whatsapp}` : '';
+const channels = [
+  { label: 'Email', value: contact.email, href: `mailto:${contact.email}` },
+  { label: 'Instagram', value: contact.instagram.label, href: contact.instagram.url },
+  { label: 'TikTok', value: contact.tiktok.label, href: contact.tiktok.url },
+  { label: 'YouTube', value: contact.youtube.label, href: contact.youtube.url },
+  ...(whatsappUrl ? [{ label: 'WhatsApp', value: 'Message me', href: whatsappUrl }] : []),
+].filter((c) => c.href && c.value);
+const projectTypes = [
+  'Video Production',
+  'Social Media Content',
+  'Photography',
+  'Product Photography',
+  'Campaign',
+  'Creative Direction',
+  'Other',
+];
+const budgets = [
+  'Under R10,000',
+  'R10,000 – R25,000',
+  'R25,000 – R50,000',
+  'R50,000 – R100,000',
+  'R100,000+',
+  'Not sure yet',
+];
+---
+
+<BaseLayout
+  title="Contact"
+  description="Start a project with TG Visuals — freelance videography and media production."
+  bare
+>
+  <section class="contact">
+    <div class="container contact__grid">
+      <!-- Left: intro + direct channels -->
+      <div class="contact__aside">
+        <p class="eyebrow" data-reveal>Contact</p>
+        <h1 class="contact__title" data-reveal style="--reveal-delay:.05s">
+          Let’s make something<br /><span class="serif-accent">worth watching.</span>
+        </h1>
+        <p class="contact__lede muted" data-reveal style="--reveal-delay:.1s">
+          Tell me about the project — the idea, timeline and anything you’ve got so far.
+          I’ll get back to you within a couple of days.
+        </p>
+
+        <ul class="contact__channels" data-reveal style="--reveal-delay:.15s">
+          {
+            channels.map((c) => (
+              <li>
+                <span class="contact__channel-label">{c.label}</span>
+                <a
+                  href={c.href}
+                  class="contact__channel-value link-underline"
+                  {...(c.href.startsWith('http') ? { target: '_blank', rel: 'noopener' } : {})}
+                >
+                  {c.value}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+
+      <!-- Right: form -->
+      <form class="contact__form" data-contact-form novalidate data-reveal style="--reveal-delay:.08s">
+        <div class="field">
+          <label for="name">Name</label>
+          <input type="text" id="name" name="name" autocomplete="name" required />
+        </div>
+        <div class="field">
+          <label for="company">Company</label>
+          <input type="text" id="company" name="company" autocomplete="organization" />
+        </div>
+        <div class="field">
+          <label for="email">Email</label>
+          <input type="email" id="email" name="email" autocomplete="email" required />
+        </div>
+        <div class="field">
+          <label for="phone">Phone</label>
+          <input type="tel" id="phone" name="phone" autocomplete="tel" />
+        </div>
+        <div class="field">
+          <label for="type">Project type</label>
+          <div class="select-wrap">
+            <select id="type" name="projectType">
+              {projectTypes.map((t) => <option value={t}>{t}</option>)}
+            </select>
+          </div>
+        </div>
+        <div class="field">
+          <label for="budget">Budget</label>
+          <div class="select-wrap">
+            <select id="budget" name="budget">
+              {budgets.map((b) => <option value={b}>{b}</option>)}
+            </select>
+          </div>
+        </div>
+        <div class="field field--full">
+          <label for="message">Tell me about the project</label>
+          <textarea id="message" name="message" rows="5" required></textarea>
+        </div>
+
+        <!-- Honeypot (spam trap) -->
+        <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" class="visually-hidden" aria-hidden="true" />
+
+        <div class="contact__submit">
+          <button type="submit" class="btn btn--red">
+            Send message <span class="btn__arrow" aria-hidden="true">↗</span>
+          </button>
+          <p class="contact__status" data-status role="status" aria-live="polite"></p>
+        </div>
+      </form>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .contact {
+    position: relative;
+    padding-top: calc(var(--nav-h) + var(--space-xl));
+    padding-bottom: var(--space-2xl);
+    overflow: hidden;
+    min-height: 100svh;
+  }
+  .contact__glow {
+    position: absolute;
+    inset: 0;
+    background: var(--grad-crimson-soft);
+    z-index: -1;
+  }
+  .contact__grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-xl);
+    align-items: start;
+  }
+  .contact__title {
+    font-size: var(--step-4);
+    letter-spacing: -0.035em;
+    line-height: 0.98;
+    margin: 0.3em 0 0.6em;
+  }
+  .contact__lede { max-width: 40ch; }
+  .contact__channels {
+    list-style: none;
+    padding: 0;
+    margin-top: var(--space-l);
+    display: grid;
+    gap: 0;
+  }
+  .contact__channels li {
+    display: flex;
+    justify-content: space-between;
+    gap: var(--space-s);
+    padding-block: 1em;
+    border-top: 1px solid var(--line-soft);
+  }
+  .contact__channels li:last-child { border-bottom: 1px solid var(--line-soft); }
+  .contact__channel-label {
+    font-family: var(--font-display);
+    font-size: 0.78rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--smoke-dim);
+  }
+  .contact__channel-value { color: var(--ink); }
+
+  .contact__form {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-s) var(--space-m);
+  }
+  .field { display: grid; gap: 0.5em; }
+  .field--full { grid-column: 1 / -1; }
+  label {
+    font-family: var(--font-display);
+    font-size: 0.8rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--smoke-dim);
+  }
+  input,
+  textarea,
+  select {
+    width: 100%;
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid var(--line);
+    color: var(--ink);
+    padding: 0.7em 0;
+    font-size: var(--step-0);
+    transition: border-color var(--dur) var(--ease);
+  }
+  textarea { resize: vertical; }
+  input:focus,
+  textarea:focus,
+  select:focus {
+    outline: none;
+    border-bottom-color: var(--red);
+  }
+  .select-wrap { position: relative; }
+  .select-wrap::after {
+    content: '▾';
+    position: absolute;
+    right: 0.2em;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--smoke-dim);
+    pointer-events: none;
+  }
+  select { appearance: none; cursor: pointer; }
+  select option { background: var(--paper); color: var(--ink); }
+  .field input:user-invalid,
+  .field textarea:user-invalid {
+    border-bottom-color: var(--red-600);
+  }
+  .contact__submit {
+    grid-column: 1 / -1;
+    display: flex;
+    align-items: center;
+    gap: var(--space-m);
+    flex-wrap: wrap;
+    margin-top: var(--space-s);
+  }
+  .contact__status {
+    font-size: var(--step--1);
+    color: var(--smoke);
+  }
+  .contact__status[data-state='error'] { color: var(--red); }
+  .contact__status[data-state='success'] { color: var(--ink); }
+
+  @media (max-width: 900px) {
+    .contact__grid { grid-template-columns: 1fr; gap: var(--space-l); }
+  }
+  @media (max-width: 480px) {
+    .contact__form { grid-template-columns: 1fr; }
+  }
+</style>
+
+<script>
+  import { contact } from '../config/site';
+
+  const form = document.querySelector<HTMLFormElement>('[data-contact-form]');
+  const status = document.querySelector<HTMLElement>('[data-status]');
+
+  function setStatus(msg: string, state: '' | 'error' | 'success') {
+    if (!status) return;
+    status.textContent = msg;
+    status.dataset.state = state;
+  }
+
+  form?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    if (!form.checkValidity()) {
+      setStatus('Please complete the required fields.', 'error');
+      form.reportValidity();
+      return;
+    }
+    // Honeypot: silently ignore bots.
+    if ((form.elements.namedItem('_gotcha') as HTMLInputElement)?.value) return;
+
+    const data = new FormData(form);
+    const endpoint = contact.formEndpoint;
+
+    if (endpoint) {
+      setStatus('Sending…', '');
+      try {
+        const res = await fetch(endpoint, {
+          method: 'POST',
+          body: data,
+          headers: { Accept: 'application/json' },
+        });
+        if (res.ok) {
+          form.reset();
+          setStatus('Thanks — your message is on its way. I’ll be in touch soon.', 'success');
+        } else {
+          throw new Error('Bad response');
+        }
+      } catch {
+        setStatus('Something went wrong. Please email me directly instead.', 'error');
+      }
+    } else {
+      // No endpoint configured yet → compose an email in the visitor's client.
+      const name = String(data.get('name') || '');
+      const company = String(data.get('company') || '');
+      const email = String(data.get('email') || '');
+      const phone = String(data.get('phone') || '');
+      const type = String(data.get('projectType') || '');
+      const budget = String(data.get('budget') || '');
+      const message = String(data.get('message') || '');
+      const subject = encodeURIComponent(`New project enquiry — ${type}`);
+      const body = encodeURIComponent(
+        `Name: ${name}\nCompany: ${company}\nEmail: ${email}\nPhone: ${phone}\n` +
+          `Project type: ${type}\nBudget: ${budget}\n\n${message}`
+      );
+      window.location.href = `mailto:${contact.email}?subject=${subject}&body=${body}`;
+      setStatus('Opening your email app…', 'success');
+    }
+  });
+</script>

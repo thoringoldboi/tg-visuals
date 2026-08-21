@@ -1,0 +1,52 @@
+---
+interface Props {
+  eyebrow?: string;
+  title: string;
+  href?: string;
+  linkLabel?: string;
+  align?: 'left' | 'center';
+}
+const { eyebrow, title, href, linkLabel = 'View all', align = 'left' } = Astro.props;
+---
+
+<div class:list={['section-heading', `is-${align}`]}>
+  <div data-reveal>
+    {eyebrow && <p class="eyebrow">{eyebrow}</p>}
+    <h2 class="section-heading__title" set:html={title} />
+  </div>
+  {
+    href && (
+      <a href={href} class="link-underline section-heading__link" data-reveal>
+        {linkLabel} <span aria-hidden="true">↗</span>
+      </a>
+    )
+  }
+</div>
+
+<style>
+  .section-heading {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: var(--space-m);
+    margin-bottom: var(--space-l);
+    flex-wrap: wrap;
+  }
+  .section-heading.is-center {
+    justify-content: center;
+    text-align: center;
+  }
+  .section-heading__title {
+    font-size: var(--step-3);
+    margin-top: 0.5em;
+    max-width: 20ch;
+  }
+  .section-heading__link {
+    color: var(--smoke);
+    white-space: nowrap;
+    padding-bottom: 0.4em;
+  }
+  .section-heading__link:hover {
+    color: var(--ink);
+  }
+</style>
