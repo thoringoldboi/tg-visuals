@@ -19,16 +19,16 @@ export const site = {
 } as const;
 
 export const contact = {
-  // TODO(Thorin): replace with your real business email.
-  email: 'hello@tgvisuals.com',
+  email: 'thoringoldswain@gmail.com',
   /** Digits only, international format, no “+”. Used for the WhatsApp link. */
   whatsapp: '',
   /**
-   * Contact-form POST endpoint (e.g. a Formspree URL like
-   * https://formspree.io/f/xxxx, or a Netlify function). Leave '' to fall back
-   * to opening the visitor's email client with the message pre-filled.
+   * Contact-form POST endpoint. Uses FormSubmit (no account) to email
+   * submissions straight to `email`. On the FIRST submission FormSubmit sends a
+   * one-time activation link to that inbox — click it once and every enquiry
+   * after that arrives automatically. Swap for a Formspree URL if you prefer.
    */
-  formEndpoint: '',
+  formEndpoint: 'https://formsubmit.co/ajax/thoringoldswain@gmail.com',
   instagram: {
     label: '@t.g_visuals',
     url: 'https://www.instagram.com/t.g_visuals/',
@@ -44,11 +44,10 @@ export const contact = {
   },
 } as const;
 
-/** Primary navigation. */
+/** Primary navigation. Work → home section; Bio & Contact are their own pages. */
 export const nav: { label: string; href: string }[] = [
-  { label: 'Work', href: '/work' },
-  { label: 'Services', href: '/#services' },
-  { label: 'About', href: '/about' },
+  { label: 'Work', href: '/#work' },
+  { label: 'Bio', href: '/bio' },
   { label: 'Contact', href: '/contact' },
 ];
 

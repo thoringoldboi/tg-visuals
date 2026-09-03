@@ -1,173 +1,71 @@
 ---
 import Logo from './Logo.astro';
-import { contact, nav, site, socialLinks } from '../config/site';
+import { contact, site, socialLinks } from '../config/site';
 const year = new Date().getFullYear();
 ---
 
-<footer class="site-footer">
-  <div class="container">
-    <div class="site-footer__cta" data-reveal>
-      <p class="eyebrow">Available for new projects</p>
-      <a href="/contact" class="site-footer__headline">
-        Let’s make something<br /><span class="serif-accent">worth watching.</span>
-      </a>
-      <p class="site-footer__sub muted">
-        Have a brand, campaign or idea that deserves better content? Let’s talk.
-      </p>
-      <div class="site-footer__actions">
-        <a href="/contact" class="btn btn--red site-footer__btn">
-          Start a project <span class="btn__arrow" aria-hidden="true">↗</span>
-        </a>
-        <a href={contact.instagram.url} class="btn btn--outline-light" target="_blank" rel="noopener">
-          Instagram <span class="btn__arrow" aria-hidden="true">↗</span>
-        </a>
-      </div>
-    </div>
+<footer class="site-footer" id="contact">
+  <div class="container site-footer__inner">
+    <p class="eyebrow site-footer__eyebrow">Get in touch</p>
+    <a href={`mailto:${contact.email}`} class="site-footer__email">{contact.email}</a>
 
-    <div class="site-footer__grid">
-      <div class="site-footer__col">
-        <span class="site-footer__label">Menu</span>
-        <ul>
-          {nav.map((i) => <li><a href={i.href} class="link-underline">{i.label}</a></li>)}
-        </ul>
-      </div>
-      <div class="site-footer__col">
-        <span class="site-footer__label">Connect</span>
-        <ul>
-          {
-            socialLinks.map((l) => (
-              <li>
-                <a
-                  href={l.url}
-                  class="link-underline"
-                  {...(l.url.startsWith('http') ? { target: '_blank', rel: 'noopener' } : {})}
-                >
-                  {l.label}
-                </a>
-              </li>
-            ))
-          }
-        </ul>
-      </div>
-      <div class="site-footer__col site-footer__col--wide">
-        <span class="site-footer__label">Get in touch</span>
-        <a href={`mailto:${contact.email}`} class="site-footer__email">{contact.email}</a>
-      </div>
+    <div class="site-footer__links">
+      {
+        socialLinks.map((l) => (
+          <a
+            href={l.url}
+            class="link-underline"
+            {...(l.url.startsWith('http') ? { target: '_blank', rel: 'noopener' } : {})}
+          >
+            {l.label}
+          </a>
+        ))
+      }
     </div>
 
     <div class="site-footer__base">
       <Logo variant="light" wordmark={false} class="site-footer__logo" />
       <span>© {year} {site.name}</span>
-      <span class="site-footer__made">Video · Photography · Social Content</span>
     </div>
   </div>
 </footer>
 
 <style>
   .site-footer {
-    position: relative;
-    padding-top: var(--space-2xl);
-    padding-bottom: var(--space-l);
     background: var(--ink-900);
     color: var(--on-dark);
-    border-top: 1px solid var(--line-soft);
+    padding-block: var(--space-2xl) var(--space-l);
   }
-  .site-footer :global(.eyebrow) { color: var(--on-dark-dim); }
-  .site-footer__cta {
-    text-align: center;
-    padding-bottom: var(--space-2xl);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.12);
-  }
-  .site-footer__sub {
-    max-width: 44ch;
-    margin: 0 auto 1.8em;
-    font-size: var(--step-0);
-    color: var(--on-dark-dim);
-  }
-  .site-footer__actions {
+  .site-footer__inner {
     display: flex;
-    gap: 0.8em;
-    justify-content: center;
-    flex-wrap: wrap;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
   }
-  .site-footer__headline {
-    display: block;
-    font-family: var(--font-display);
-    font-weight: 600;
-    font-size: var(--step-4);
-    line-height: 0.98;
-    letter-spacing: -0.03em;
-    margin: 0.4em 0 0.7em;
-    transition: opacity var(--dur) var(--ease);
-  }
-  .site-footer__headline:hover {
-    opacity: 0.85;
-  }
-  .site-footer__grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr 2fr;
-    gap: var(--space-m);
-    padding-block: var(--space-xl);
-  }
-  .site-footer__label {
-    display: block;
-    font-family: var(--font-display);
-    font-size: 0.78rem;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: var(--smoke-dim);
-    margin-bottom: 1.4em;
-  }
-  .site-footer__col ul {
-    list-style: none;
-    padding: 0;
-    display: grid;
-    gap: 0.7em;
-  }
-  .site-footer__col a {
-    color: var(--on-dark-dim);
-  }
-  .site-footer__col a:hover {
-    color: var(--white);
-  }
-  .site-footer__col--wide {
-    text-align: right;
-  }
+  .site-footer__eyebrow { color: var(--on-dark-dim); }
   .site-footer__email {
     font-family: var(--font-display);
-    font-size: clamp(1.3rem, 3.5vw, 2.4rem);
-    font-weight: 500;
-    letter-spacing: -0.02em;
+    font-weight: 600;
+    font-size: clamp(1.8rem, 1rem + 4vw, 4rem);
+    letter-spacing: -0.03em;
     color: var(--white);
-    transition: color var(--dur) var(--ease);
+    margin: 0.5em 0 0.9em;
+    transition: opacity var(--dur) var(--ease);
   }
-  .site-footer__logo :global(.logo__mark) { height: 1.6em; opacity: 0.9; }
-  .site-footer__email:hover {
-    color: var(--red);
+  .site-footer__email:hover { opacity: 0.7; }
+  .site-footer__links {
+    display: flex;
+    gap: var(--space-m);
+    color: var(--on-dark-dim);
   }
+  .site-footer__links a:hover { color: var(--white); }
   .site-footer__base {
     display: flex;
     align-items: center;
-    justify-content: space-between;
     gap: var(--space-s);
-    padding-top: var(--space-l);
-    border-top: 1px solid rgba(255, 255, 255, 0.12);
+    margin-top: var(--space-2xl);
     font-size: var(--step--1);
     color: var(--on-dark-dim);
   }
-
-  @media (max-width: 720px) {
-    .site-footer__grid {
-      grid-template-columns: 1fr 1fr;
-    }
-    .site-footer__col--wide {
-      grid-column: 1 / -1;
-      text-align: left;
-      margin-top: var(--space-s);
-    }
-    .site-footer__base {
-      flex-direction: column;
-      gap: 0.4em;
-    }
-  }
+  .site-footer__logo :global(.logo__mark) { height: 1.5em; opacity: 0.9; }
 </style>

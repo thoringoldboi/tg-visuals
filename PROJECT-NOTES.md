@@ -1,48 +1,58 @@
 # TG Visuals — project notes
 
-A premium production-studio site built with [Astro](https://astro.build).
-**Light editorial theme: white paper · black typography · one red accent.**
-Cinematic, minimal, fully responsive, SEO/perf-optimised. No gradients anywhere —
-colour comes from the photography/video and from the bold red **About** chapter.
+A minimal **single-page** production-studio site built with
+[Astro](https://astro.build). **Pure black & white** — no colour accent.
+Full-screen showreel hero with the logo centred (à la joshuafarrer.com /
+luahell.com), a portfolio grid, a short bio, and a contact footer.
 
-### Colour system (art direction)
-- ~80–90% white / black / neutral, ~10–20% red.
-- Red is reserved for the **About section** (solid-red, full-bleed editorial
-  chapter with Thorin's portrait — homepage teaser + `/about`) and small accents:
-  eyebrow ticks, index numbers, list dashes, hover states, the play button and a
-  couple of CTAs. Don't spread red across headlines — that's what keeps the
-  About chapter special.
-- Tokens live in `src/styles/global.css`: `--paper` (bg), `--ink` (text/black),
-  `--red` (accent), `--on-dark`/`--on-dark-dim` for the black footer & red About.
-  Dark/inverted surfaces (footer = black final CTA, About = red) set their own
-  light text colours locally.
+### Structure (three pages)
+- **Home** (`src/pages/index.astro`): **Hero** (full-screen showreel + centred
+  logo lockup) → **Work** (`#work`, portfolio grid) → contact footer.
+- **Bio** (`src/pages/bio.astro`): portrait + intro.
+- **Contact** (`src/pages/contact.astro`): "Want to chat about a project?" form
+  (Name, Email, Description → sends to you; see below).
 
-**Positioning:** high-end production *plus* an understanding of what makes
-content perform online. The homepage leads with that (“Visuals that look
-premium. Content that performs.”) and features the **2M+ views** proof point.
+The header is a minimal bar (TG VISUALS + Work/Bio/Contact). It's **transparent
+over the home hero and turns solid white on scroll**; on every other page it's
+solid white from the start. That's controlled by `overlayHeader` — home passes
+`<BaseLayout overlayHeader>`, other pages don't. Nav: Work → `/#work`,
+Bio → `/bio`, Contact → `/contact`.
+
+### Make the contact form deliver to your inbox
+The form is static-host friendly. Until an endpoint is set it just opens the
+visitor's email app; to have submissions **emailed to you automatically** (works
+on Vercel/Netlify):
+1. Create a free form at **formspree.io** (or web3forms.com) with your email.
+2. Paste the endpoint URL into `src/config/site.ts` → `contact.formEndpoint`
+   (e.g. `https://formspree.io/f/xxxxxx`).
+That one line is all it takes — the form then POSTs there and you get the emails.
+
+### Colour / imagery
+- Black & white only. Tokens in `src/styles/global.css`; the old `--red*` tokens
+  now map to black.
+- Placeholder imagery (hero poster, portfolio tiles, bio portrait) is
+  **desaturated with `filter: grayscale(1)`** so everything reads B&W now.
+  Remove that filter (in `index.astro`) to show real work in full colour.
+
+## Add your showreel (the hero video)
+Drop your reel into **`public/showreel.mp4`** (optionally also `public/showreel.webm`
+for smaller/better-quality delivery). The hero `<video>` autoplays it muted +
+looped, full-screen, with the desaturated poster as the fallback until the file
+exists. Keep it short and compressed (a 1080p, ~10–20 MB loop is plenty).
 
 ## Replace before launch (clearly-marked placeholders)
 
-Everything below is a placeholder built to be swapped — no real clients,
-testimonials or stats have been invented. The only confirmed figure used is
-**2M+ views** (edit it in `src/config/site.ts` → `site.views`).
+No real clients, testimonials or stats have been invented. The only confirmed
+figure used is **2M+ views** (`src/config/site.ts` → `site.views`).
 
-- **Contact email** — `src/config/site.ts` → `contact.email` (currently
-  `hello@tgvisuals.com`).
-- **Socials** — Instagram is set to the real `@t.g_visuals`. TikTok/YouTube are
-  blank on purpose (no guessed links); add real URLs in `site.ts` and they’ll
-  appear in the nav/footer/contact automatically.
-- **Selected Work** — `src/data/work.ts` → `films[]`. Titles/descriptions are
-  sample projects; `client` is set to “Sample project”. Swap in real work +
-  add a `videoUrl` (YouTube/Vimeo) per project.
-- **Showreel** — the hero uses a poster + “Preview coming soon”. Give me a
-  reel URL to wire in, or edit the `<VideoEmbed>` in `src/pages/index.astro`.
-- **Testimonials** — add real quotes to `testimonials[]` in `work.ts`; the
-  homepage testimonial section appears automatically once there’s at least one.
-- **Images** — drop real files into `src/assets/work/` (same filenames) and the
-  portrait at `src/assets/portrait/thor-portrait.jpg`.
-- **Contact form** — set `contact.formEndpoint` to a Formspree URL to collect
-  submissions; otherwise it opens the visitor’s email app.
+- **Showreel** — `public/showreel.mp4` (see above).
+- **Contact email** — `src/config/site.ts` → `contact.email`.
+- **Socials** — Instagram is the real `@t.g_visuals`. TikTok/YouTube are blank on
+  purpose; add real URLs in `site.ts` and they appear in nav/footer automatically.
+- **Portfolio** — captions/covers come from `src/data/work.ts` (`films[]`) plus a
+  few stills, wired up in `index.astro`'s `portfolio` array. Drop real files into
+  `src/assets/work/` (same filenames) to replace the placeholder frames.
+- **Bio portrait** — `src/assets/portrait/thor-portrait.jpg`.
 
 ## Run it locally
 

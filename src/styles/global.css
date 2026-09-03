@@ -28,12 +28,14 @@
   --white: #ffffff;        /* light — for text/marks on dark or red surfaces */
   --pure: #ffffff;
 
-  /* Crimson accent — used sparingly; bold only in the About chapter */
-  --red: #d81e34;          /* primary accent */
-  --red-bright: #f0233b;
-  --red-600: #b21526;
-  --red-800: #6d0e18;
-  --red-900: #3a0a10;      /* deep maroon */
+  /* Pure black & white — no colour accent. These map to ink so any
+     legacy "accent" usage renders as black on light / handled explicitly
+     on dark surfaces. */
+  --red: var(--ink);
+  --red-bright: #000000;
+  --red-600: var(--ink);
+  --red-800: var(--ink);
+  --red-900: var(--ink);
 
   /* No decorative gradient backgrounds — flat, editorial.
      Legacy glow references resolve to transparent / flat black. */

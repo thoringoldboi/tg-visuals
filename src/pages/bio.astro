@@ -1,0 +1,82 @@
+---
+import { Image } from 'astro:assets';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { site } from '../config/site';
+import portrait from '../assets/portrait/thor-portrait.jpg';
+---
+
+<BaseLayout
+  title="Bio"
+  description="Thorin Goldswain — the videographer and photographer behind TG Visuals."
+>
+  <section class="bio">
+    <div class="container bio__grid">
+      <div class="bio__media" data-reveal>
+        <Image
+          src={portrait}
+          alt="Thorin Goldswain, the videographer and photographer behind TG Visuals"
+          widths={[420, 640, 900]}
+          sizes="(max-width: 820px) 100vw, 42vw"
+          class="bio__img"
+          loading="eager"
+        />
+      </div>
+      <div class="bio__body" data-reveal style="--reveal-delay:.08s">
+        <p class="eyebrow">Bio</p>
+        <h1 class="bio__lead">
+          I’m Thorin Goldswain — the eye, the camera and the edit behind TG&nbsp;Visuals.
+        </h1>
+        <p class="bio__text">
+          I create cinematic video, photography and social-first content for brands
+          and people who care how they’re seen. I run every project end to end —
+          concept, shoot, edit and grade — so the work stays sharp and consistent
+          from first frame to final cut.
+        </p>
+        <p class="bio__text">
+          Beyond the craft, I build content to actually perform. Work I’ve created
+          has generated {site.views} views across social platforms.
+        </p>
+        <a href="/#work" class="link-underline bio__link">View the work <span aria-hidden="true">↗</span></a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .bio {
+    padding-top: calc(var(--nav-h) + var(--space-xl));
+    padding-bottom: var(--space-2xl);
+  }
+  .bio__grid {
+    display: grid;
+    grid-template-columns: 0.85fr 1.15fr;
+    gap: var(--space-l);
+    align-items: center;
+  }
+  .bio__img {
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+    object-position: 50% 28%;
+    filter: grayscale(1) contrast(1.03);
+  }
+  .bio__lead {
+    font-size: var(--step-3);
+    font-weight: 600;
+    letter-spacing: -0.025em;
+    line-height: 1.08;
+    margin: 0.35em 0 0.7em;
+    max-width: 20ch;
+  }
+  .bio__text {
+    color: var(--smoke);
+    max-width: 54ch;
+    line-height: 1.65;
+  }
+  .bio__text + .bio__text { margin-top: 1em; }
+  .bio__link { display: inline-block; margin-top: 1.8em; color: var(--ink); }
+  @media (max-width: 820px) {
+    .bio__grid { grid-template-columns: 1fr; }
+    .bio__img { aspect-ratio: 3 / 4; max-height: 70vh; }
+  }
+</style>

@@ -1,244 +1,126 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { contact } from '../config/site';
-
-const whatsappUrl = contact.whatsapp ? `https://wa.me/${contact.whatsapp}` : '';
-const channels = [
-  { label: 'Email', value: contact.email, href: `mailto:${contact.email}` },
-  { label: 'Instagram', value: contact.instagram.label, href: contact.instagram.url },
-  { label: 'TikTok', value: contact.tiktok.label, href: contact.tiktok.url },
-  { label: 'YouTube', value: contact.youtube.label, href: contact.youtube.url },
-  ...(whatsappUrl ? [{ label: 'WhatsApp', value: 'Message me', href: whatsappUrl }] : []),
-].filter((c) => c.href && c.value);
-const projectTypes = [
-  'Video Production',
-  'Social Media Content',
-  'Photography',
-  'Product Photography',
-  'Campaign',
-  'Creative Direction',
-  'Other',
-];
-const budgets = [
-  'Under R10,000',
-  'R10,000 – R25,000',
-  'R25,000 – R50,000',
-  'R50,000 – R100,000',
-  'R100,000+',
-  'Not sure yet',
-];
 ---
 
 <BaseLayout
   title="Contact"
-  description="Start a project with TG Visuals — freelance videography and media production."
-  bare
+  description="Start a project with TG Visuals — tell me about it and I'll get back to you."
 >
   <section class="contact">
-    <div class="container contact__grid">
-      <!-- Left: intro + direct channels -->
-      <div class="contact__aside">
-        <p class="eyebrow" data-reveal>Contact</p>
-        <h1 class="contact__title" data-reveal style="--reveal-delay:.05s">
-          Let’s make something<br /><span class="serif-accent">worth watching.</span>
-        </h1>
-        <p class="contact__lede muted" data-reveal style="--reveal-delay:.1s">
-          Tell me about the project — the idea, timeline and anything you’ve got so far.
-          I’ll get back to you within a couple of days.
-        </p>
+    <div class="container contact__inner">
+      <p class="eyebrow" data-reveal>Contact</p>
+      <h1 class="contact__title" data-reveal style="--reveal-delay:.05s">
+        Want to chat about a project?
+      </h1>
+      <p class="contact__lede" data-reveal style="--reveal-delay:.1s">
+        Tell me a bit about what you have in mind — the idea, timeline and anything
+        you’ve got so far. I’ll get back to you within a couple of days.
+      </p>
 
-        <ul class="contact__channels" data-reveal style="--reveal-delay:.15s">
-          {
-            channels.map((c) => (
-              <li>
-                <span class="contact__channel-label">{c.label}</span>
-                <a
-                  href={c.href}
-                  class="contact__channel-value link-underline"
-                  {...(c.href.startsWith('http') ? { target: '_blank', rel: 'noopener' } : {})}
-                >
-                  {c.value}
-                </a>
-              </li>
-            ))
-          }
-        </ul>
-      </div>
-
-      <!-- Right: form -->
-      <form class="contact__form" data-contact-form novalidate data-reveal style="--reveal-delay:.08s">
+      <form class="form" data-contact-form novalidate data-reveal style="--reveal-delay:.14s">
         <div class="field">
-          <label for="name">Name</label>
+          <label for="name">Name <span class="req">*</span></label>
           <input type="text" id="name" name="name" autocomplete="name" required />
         </div>
         <div class="field">
-          <label for="company">Company</label>
-          <input type="text" id="company" name="company" autocomplete="organization" />
-        </div>
-        <div class="field">
-          <label for="email">Email</label>
+          <label for="email">Email address <span class="req">*</span></label>
           <input type="email" id="email" name="email" autocomplete="email" required />
         </div>
         <div class="field">
-          <label for="phone">Phone</label>
-          <input type="tel" id="phone" name="phone" autocomplete="tel" />
-        </div>
-        <div class="field">
-          <label for="type">Project type</label>
-          <div class="select-wrap">
-            <select id="type" name="projectType">
-              {projectTypes.map((t) => <option value={t}>{t}</option>)}
-            </select>
-          </div>
-        </div>
-        <div class="field">
-          <label for="budget">Budget</label>
-          <div class="select-wrap">
-            <select id="budget" name="budget">
-              {budgets.map((b) => <option value={b}>{b}</option>)}
-            </select>
-          </div>
-        </div>
-        <div class="field field--full">
-          <label for="message">Tell me about the project</label>
-          <textarea id="message" name="message" rows="5" required></textarea>
+          <label for="message">Tell me about the project <span class="req">*</span></label>
+          <textarea id="message" name="message" rows="7" required></textarea>
         </div>
 
-        <!-- Honeypot (spam trap) -->
-        <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" class="visually-hidden" aria-hidden="true" />
+        <!-- FormSubmit settings + spam trap -->
+        <input type="hidden" name="_subject" value="New project enquiry — TG Visuals" />
+        <input type="hidden" name="_captcha" value="false" />
+        <input type="hidden" name="_template" value="table" />
+        <input type="text" name="_honey" tabindex="-1" autocomplete="off" class="visually-hidden" aria-hidden="true" />
 
-        <div class="contact__submit">
-          <button type="submit" class="btn btn--red">
-            Send message <span class="btn__arrow" aria-hidden="true">↗</span>
+        <div class="form__submit">
+          <button type="submit" class="btn">
+            Submit <span class="btn__arrow" aria-hidden="true">↗</span>
           </button>
-          <p class="contact__status" data-status role="status" aria-live="polite"></p>
+          <p class="form__status" data-status role="status" aria-live="polite"></p>
         </div>
       </form>
+
+      <p class="contact__alt">
+        Prefer email? <a href={`mailto:${contact.email}`} class="link-underline">{contact.email}</a>
+      </p>
     </div>
   </section>
 </BaseLayout>
 
 <style>
   .contact {
-    position: relative;
     padding-top: calc(var(--nav-h) + var(--space-xl));
     padding-bottom: var(--space-2xl);
-    overflow: hidden;
-    min-height: 100svh;
   }
-  .contact__glow {
-    position: absolute;
-    inset: 0;
-    background: var(--grad-crimson-soft);
-    z-index: -1;
-  }
-  .contact__grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: var(--space-xl);
-    align-items: start;
-  }
+  .contact__inner { max-width: 720px; }
   .contact__title {
-    font-size: var(--step-4);
-    letter-spacing: -0.035em;
-    line-height: 0.98;
+    font-size: clamp(1.15rem, 4.7vw, 2.5rem);
+    letter-spacing: -0.03em;
+    line-height: 1.1;
+    white-space: nowrap;
     margin: 0.3em 0 0.6em;
   }
-  .contact__lede { max-width: 40ch; }
-  .contact__channels {
-    list-style: none;
-    padding: 0;
-    margin-top: var(--space-l);
-    display: grid;
-    gap: 0;
+  .contact__lede {
+    color: var(--smoke);
+    max-width: 52ch;
+    line-height: 1.6;
+    margin-bottom: var(--space-l);
   }
-  .contact__channels li {
-    display: flex;
-    justify-content: space-between;
-    gap: var(--space-s);
-    padding-block: 1em;
-    border-top: 1px solid var(--line-soft);
-  }
-  .contact__channels li:last-child { border-bottom: 1px solid var(--line-soft); }
-  .contact__channel-label {
-    font-family: var(--font-display);
-    font-size: 0.78rem;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: var(--smoke-dim);
-  }
-  .contact__channel-value { color: var(--ink); }
 
-  .contact__form {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: var(--space-s) var(--space-m);
-  }
-  .field { display: grid; gap: 0.5em; }
-  .field--full { grid-column: 1 / -1; }
+  .form { display: grid; gap: var(--space-m); }
+  .field { display: grid; gap: 0.6em; }
   label {
     font-family: var(--font-display);
-    font-size: 0.8rem;
-    letter-spacing: 0.1em;
+    font-size: 0.82rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
     text-transform: uppercase;
-    color: var(--smoke-dim);
-  }
-  input,
-  textarea,
-  select {
-    width: 100%;
-    background: transparent;
-    border: none;
-    border-bottom: 1px solid var(--line);
     color: var(--ink);
-    padding: 0.7em 0;
+  }
+  .req { color: var(--smoke-dim); }
+  input,
+  textarea {
+    width: 100%;
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    color: var(--ink);
+    padding: 0.85em 1em;
     font-size: var(--step-0);
     transition: border-color var(--dur) var(--ease);
   }
-  textarea { resize: vertical; }
+  textarea { resize: vertical; min-height: 160px; }
   input:focus,
-  textarea:focus,
-  select:focus {
+  textarea:focus {
     outline: none;
-    border-bottom-color: var(--red);
+    border-color: var(--ink);
   }
-  .select-wrap { position: relative; }
-  .select-wrap::after {
-    content: '▾';
-    position: absolute;
-    right: 0.2em;
-    top: 50%;
-    transform: translateY(-50%);
-    color: var(--smoke-dim);
-    pointer-events: none;
-  }
-  select { appearance: none; cursor: pointer; }
-  select option { background: var(--paper); color: var(--ink); }
-  .field input:user-invalid,
-  .field textarea:user-invalid {
-    border-bottom-color: var(--red-600);
-  }
-  .contact__submit {
-    grid-column: 1 / -1;
+  input:user-invalid,
+  textarea:user-invalid { border-color: #b00020; }
+
+  .form__submit {
     display: flex;
     align-items: center;
     gap: var(--space-m);
     flex-wrap: wrap;
-    margin-top: var(--space-s);
+    margin-top: var(--space-2xs);
   }
-  .contact__status {
-    font-size: var(--step--1);
-    color: var(--smoke);
-  }
-  .contact__status[data-state='error'] { color: var(--red); }
-  .contact__status[data-state='success'] { color: var(--ink); }
+  .form__status { font-size: var(--step--1); color: var(--smoke); }
+  .form__status[data-state='error'] { color: #b00020; }
+  .form__status[data-state='success'] { color: var(--ink); }
 
-  @media (max-width: 900px) {
-    .contact__grid { grid-template-columns: 1fr; gap: var(--space-l); }
+  .contact__alt {
+    margin-top: var(--space-l);
+    color: var(--smoke);
+    font-size: var(--step--1);
   }
-  @media (max-width: 480px) {
-    .contact__form { grid-template-columns: 1fr; }
-  }
+  .contact__alt a { color: var(--ink); }
 </style>
 
 <script>
@@ -261,7 +143,7 @@ const budgets = [
       return;
     }
     // Honeypot: silently ignore bots.
-    if ((form.elements.namedItem('_gotcha') as HTMLInputElement)?.value) return;
+    if ((form.elements.namedItem('_honey') as HTMLInputElement)?.value) return;
 
     const data = new FormData(form);
     const endpoint = contact.formEndpoint;
@@ -284,19 +166,12 @@ const budgets = [
         setStatus('Something went wrong. Please email me directly instead.', 'error');
       }
     } else {
-      // No endpoint configured yet → compose an email in the visitor's client.
+      // No endpoint set yet → open the visitor's email client, pre-filled.
       const name = String(data.get('name') || '');
-      const company = String(data.get('company') || '');
       const email = String(data.get('email') || '');
-      const phone = String(data.get('phone') || '');
-      const type = String(data.get('projectType') || '');
-      const budget = String(data.get('budget') || '');
       const message = String(data.get('message') || '');
-      const subject = encodeURIComponent(`New project enquiry — ${type}`);
-      const body = encodeURIComponent(
-        `Name: ${name}\nCompany: ${company}\nEmail: ${email}\nPhone: ${phone}\n` +
-          `Project type: ${type}\nBudget: ${budget}\n\n${message}`
-      );
+      const subject = encodeURIComponent(`New project enquiry — ${name}`);
+      const body = encodeURIComponent(`Name: ${name}\nEmail: ${email}\n\n${message}`);
       window.location.href = `mailto:${contact.email}?subject=${subject}&body=${body}`;
       setStatus('Opening your email app…', 'success');
     }
