@@ -2,10 +2,10 @@
 import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
 
-// Update `site` to the production domain when it's chosen.
+// Update `site` if you later add a custom domain (e.g. tgvisuals.com).
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://tgvisuals.com',
+  site: 'https://tg-visuals.vercel.app',
   integrations: [sitemap()],
   build: {
     inlineStylesheets: 'auto',

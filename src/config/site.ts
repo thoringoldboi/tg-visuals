@@ -11,8 +11,8 @@ export const site = {
   /** SEO meta description. */
   description:
     'Premium video production, photography and social media content by TG Visuals. High-end visuals designed to capture attention, build brands and drive results.',
-  /** Production URL — update when hosting is chosen. */
-  url: 'https://tgvisuals.com',
+  /** Production URL. Update if you add a custom domain later. */
+  url: 'https://tg-visuals.vercel.app',
   locale: 'en_ZA',
   /** Headline credibility figure. */
   views: '2M+',
