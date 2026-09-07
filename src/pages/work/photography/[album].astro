@@ -46,7 +46,7 @@ const { album } = Astro.props;
 
   .gallery { display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--space-m) var(--space-s); }
   .photo { overflow: hidden; background: var(--charcoal); }
-  .photo__img { width: 100%; height: auto; display: block; filter: grayscale(1) contrast(1.03); transition: transform 1.1s var(--ease); }
+  .photo__img { width: 100%; height: auto; display: block; transition: transform 1.1s var(--ease); }
   .photo:hover .photo__img { transform: scale(1.03); }
   @media (max-width: 640px) { .gallery { grid-template-columns: 1fr; } }
 </style>

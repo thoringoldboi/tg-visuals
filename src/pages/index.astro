@@ -1,15 +1,12 @@
 ---
 import { Image } from 'astro:assets';
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { filmProjects, photoAlbums, img } from '../data/work';
+import { photoAlbums } from '../data/work';
 import heroPoster from '../assets/work/hero-poster.jpg';
 import markWhite from '../assets/brand/tg-mark-white.png';
 
 // Curated best-of for the home page — the full library lives on /work.
-const selected = [
-  ...filmProjects.map((p) => ({ src: img(p.cover), title: p.title, meta: p.category })),
-  ...photoAlbums.map((a) => ({ src: a.cover, title: a.title, meta: 'Photography' })),
-].slice(0, 6);
+const selected = photoAlbums.slice(0, 3).map((a) => ({ src: a.cover, title: a.title, meta: 'Photography' }));
 ---
 
 <BaseLayout overlayHeader>
@@ -199,9 +196,6 @@ const selected = [
     width: 100%;
     height: 100%;
     object-fit: cover;
-    /* Desaturated for the black-and-white look. Remove this filter to show
-       real work in full colour. */
-    filter: grayscale(1) contrast(1.03);
     transition: transform 1.1s var(--ease);
   }
   .tile:hover .tile__img {
