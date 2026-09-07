@@ -1,7 +1,7 @@
 ---
 import { Image } from 'astro:assets';
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import { photoAlbums, img } from '../../data/work';
+import { photoAlbums } from '../../data/work';
 ---
 
 <BaseLayout title="Photography — Work" description="Photography albums by TG Visuals — studio, automotive, event and product.">
@@ -17,7 +17,7 @@ import { photoAlbums, img } from '../../data/work';
           photoAlbums.map((a, i) => (
             <a href={`/work/photography/${a.slug}`} class="album" data-reveal style={`--reveal-delay:${0.08 + i * 0.05}s`}>
               <div class="album__media">
-                <Image src={img(a.cover)} alt={a.title} widths={[500, 800]} sizes="(max-width:640px) 100vw, 50vw" class="album__img" loading="lazy" />
+                <Image src={a.cover} alt={a.title} widths={[500, 800]} sizes="(max-width:640px) 100vw, 50vw" class="album__img" loading="lazy" />
               </div>
               <div class="album__row">
                 <span class="album__title">{a.title}</span>

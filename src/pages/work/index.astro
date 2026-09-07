@@ -4,7 +4,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import { filmProjects, photoAlbums, img } from '../../data/work';
 
 const folders = [
-  { href: '/work/video', title: 'Video', meta: 'Film · Commercial · Social', cover: filmProjects[0].cover },
+  { href: '/work/video', title: 'Video', meta: 'Film · Commercial · Social', cover: img(filmProjects[0].cover) },
   { href: '/work/photography', title: 'Photography', meta: 'Studio · Automotive · Event · Product', cover: photoAlbums[0].cover },
 ];
 ---
@@ -20,7 +20,7 @@ const folders = [
           folders.map((f, i) => (
             <a href={f.href} class="folder" data-reveal style={`--reveal-delay:${0.08 + i * 0.06}s`}>
               <div class="folder__media">
-                <Image src={img(f.cover)} alt={f.title} widths={[600, 900, 1300]} sizes="(max-width:760px) 100vw, 50vw" class="folder__img" loading="eager" />
+                <Image src={f.cover} alt={f.title} widths={[600, 900, 1300]} sizes="(max-width:760px) 100vw, 50vw" class="folder__img" loading="eager" />
               </div>
               <div class="folder__row">
                 <span class="folder__title">{f.title}</span>

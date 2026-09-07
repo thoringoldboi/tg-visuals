@@ -75,22 +75,56 @@ export const social: SocialClip[] = [
 ];
 
 // ---------------------------------------------------------------------------
-// PHOTOGRAPHY — Albums. /work/photography shows these as folders; each opens
-// its own gallery at /work/photography/<slug>. Add/reorder freely.
+// PHOTOGRAPHY — Albums (DROP-AND-GO).
+//
+// Each folder in  /src/assets/work/photography/<album>/  becomes an album
+// automatically. Just drop images into the folder — no code changes needed:
+//   • Add a NEW album  → create a new folder (e.g. .../photography/fashion/)
+//   • Add photos       → drop .jpg/.png/.webp files into the album's folder
+//   • Set the cover    → name one file "cover.jpg" (otherwise the first is used)
+//   • Reorder / rename → see `albumOrder` below; titles come from the folder name
 // ---------------------------------------------------------------------------
 export interface PhotoAlbum {
   slug: string;
   title: string;
-  cover: string;
-  images: string[];
+  cover: ImageMetadata;
+  images: ImageMetadata[];
 }
 
-export const photoAlbums: PhotoAlbum[] = [
-  { slug: 'studio', title: 'Studio', cover: 'photo-studio-01', images: ['photo-studio-01', 'photo-studio-02', 'photo-studio-03', 'photo-studio-04'] },
-  { slug: 'automotive', title: 'Automotive', cover: 'photo-creative-01', images: ['photo-creative-01', 'photo-creative-02', 'photo-creative-03', 'photo-creative-04'] },
-  { slug: 'event', title: 'Event', cover: 'photo-lifestyle-01', images: ['photo-lifestyle-01', 'photo-lifestyle-02', 'photo-lifestyle-03', 'photo-lifestyle-04'] },
-  { slug: 'product', title: 'Product', cover: 'photo-product-01', images: ['photo-product-01', 'photo-product-02', 'photo-product-03', 'photo-product-04'] },
-];
+const albumFiles = import.meta.glob<{ default: ImageMetadata }>(
+  '../assets/work/photography/*/*.{jpg,jpeg,png,webp}',
+  { eager: true }
+);
+
+/** Preferred display order. Folders not listed appear after, alphabetically. */
+const albumOrder = ['studio', 'automotive', 'event', 'product'];
+
+const titleize = (slug: string) =>
+  slug.replace(/[-_]/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase());
+
+const grouped: Record<string, { name: string; img: ImageMetadata }[]> = {};
+for (const path in albumFiles) {
+  const parts = path.split('/');
+  const slug = parts[parts.length - 2];
+  const name = parts[parts.length - 1];
+  (grouped[slug] ??= []).push({ name, img: albumFiles[path].default });
+}
+
+export const photoAlbums: PhotoAlbum[] = Object.keys(grouped)
+  .sort((a, b) => {
+    const ia = albumOrder.indexOf(a);
+    const ib = albumOrder.indexOf(b);
+    if (ia === -1 && ib === -1) return a.localeCompare(b);
+    if (ia === -1) return 1;
+    if (ib === -1) return -1;
+    return ia - ib;
+  })
+  .map((slug) => {
+    const items = grouped[slug].sort((a, b) => a.name.localeCompare(b.name));
+    const images = items.map((i) => i.img);
+    const cover = items.find((i) => /(^|\/)cover\./i.test(i.name))?.img ?? images[0];
+    return { slug, title: titleize(slug), cover, images };
+  });
 
 // ---------------------------------------------------------------------------
 // Services (used elsewhere / future).

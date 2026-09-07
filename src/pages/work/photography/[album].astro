@@ -1,7 +1,7 @@
 ---
 import { Image } from 'astro:assets';
 import BaseLayout from '../../../layouts/BaseLayout.astro';
-import { photoAlbums, img } from '../../../data/work';
+import { photoAlbums } from '../../../data/work';
 
 export function getStaticPaths() {
   return photoAlbums.map((album) => ({
@@ -25,9 +25,9 @@ const { album } = Astro.props;
 
       <div class="gallery">
         {
-          album.images.map((name) => (
+          album.images.map((image) => (
             <div class="photo" data-reveal>
-              <Image src={img(name)} alt={album.title} widths={[400, 800, 1200]} sizes="(max-width:640px) 100vw, 50vw" class="photo__img" loading="lazy" />
+              <Image src={image} alt={album.title} widths={[400, 800, 1200]} sizes="(max-width:640px) 100vw, 50vw" class="photo__img" loading="lazy" />
             </div>
           ))
         }
