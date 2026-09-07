@@ -1,14 +1,14 @@
 ---
 import { Image } from 'astro:assets';
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { filmProjects, photoProjects, img } from '../data/work';
+import { filmProjects, photoAlbums, img } from '../data/work';
 import heroPoster from '../assets/work/hero-poster.jpg';
 import markWhite from '../assets/brand/tg-mark-white.png';
 
 // Curated best-of for the home page — the full library lives on /work.
 const selected = [
   ...filmProjects.map((p) => ({ cover: p.cover, title: p.title, meta: p.category })),
-  ...photoProjects.map((p) => ({ cover: p.cover, title: p.title, meta: p.category })),
+  ...photoAlbums.map((a) => ({ cover: a.cover, title: a.title, meta: 'Photography' })),
 ].slice(0, 6);
 ---
 

@@ -75,52 +75,21 @@ export const social: SocialClip[] = [
 ];
 
 // ---------------------------------------------------------------------------
-// PHOTOGRAPHY — Featured projects (named shoots that tell a story). Each has a
-// cover + a few supporting frames. This is where your strongest shoots live.
+// PHOTOGRAPHY — Albums. /work/photography shows these as folders; each opens
+// its own gallery at /work/photography/<slug>. Add/reorder freely.
 // ---------------------------------------------------------------------------
-export interface PhotoProject {
-  title: string;
-  category: string;
-  year?: number;
-  cover: string;
-  images: string[];
-  featured?: boolean;
-}
-
-export const photoProjects: PhotoProject[] = [
-  {
-    title: 'Bike Shoot',
-    category: 'Automotive',
-    year: 2025,
-    cover: 'photo-creative-01',
-    images: ['photo-creative-01', 'photo-creative-02', 'photo-creative-03', 'photo-creative-04'],
-    featured: true,
-  },
-  {
-    title: 'Fashion Campaign',
-    category: 'Fashion',
-    year: 2025,
-    cover: 'photo-commercial-01',
-    images: ['photo-commercial-01', 'photo-commercial-02', 'photo-commercial-03', 'photo-commercial-04'],
-    featured: true,
-  },
-];
-
-// ---------------------------------------------------------------------------
-// PHOTOGRAPHY — Category galleries (the higher-volume work by subject).
-// ---------------------------------------------------------------------------
-export interface PhotoGallery {
+export interface PhotoAlbum {
   slug: string;
   title: string;
+  cover: string;
   images: string[];
 }
 
-export const photoGalleries: PhotoGallery[] = [
-  { slug: 'automotive', title: 'Automotive', images: ['photo-creative-01', 'photo-creative-02', 'photo-creative-03', 'photo-creative-04'] },
-  { slug: 'studio', title: 'Studio', images: ['photo-studio-01', 'photo-studio-02', 'photo-studio-03', 'photo-studio-04'] },
-  { slug: 'product', title: 'Product', images: ['photo-product-01', 'photo-product-02', 'photo-product-03', 'photo-product-04'] },
-  { slug: 'fashion', title: 'Fashion & E-commerce', images: ['photo-commercial-01', 'photo-commercial-02', 'photo-commercial-03', 'photo-commercial-04'] },
-  { slug: 'events', title: 'Events', images: ['photo-lifestyle-01', 'photo-lifestyle-02', 'photo-lifestyle-03', 'photo-lifestyle-04'] },
+export const photoAlbums: PhotoAlbum[] = [
+  { slug: 'studio', title: 'Studio', cover: 'photo-studio-01', images: ['photo-studio-01', 'photo-studio-02', 'photo-studio-03', 'photo-studio-04'] },
+  { slug: 'automotive', title: 'Automotive', cover: 'photo-creative-01', images: ['photo-creative-01', 'photo-creative-02', 'photo-creative-03', 'photo-creative-04'] },
+  { slug: 'event', title: 'Event', cover: 'photo-lifestyle-01', images: ['photo-lifestyle-01', 'photo-lifestyle-02', 'photo-lifestyle-03', 'photo-lifestyle-04'] },
+  { slug: 'product', title: 'Product', cover: 'photo-product-01', images: ['photo-product-01', 'photo-product-02', 'photo-product-03', 'photo-product-04'] },
 ];
 
 // ---------------------------------------------------------------------------
