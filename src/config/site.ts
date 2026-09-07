@@ -46,7 +46,7 @@ export const contact = {
 
 /** Primary navigation. Work → home section; Bio & Contact are their own pages. */
 export const nav: { label: string; href: string }[] = [
-  { label: 'Work', href: '/#work' },
+  { label: 'Work', href: '/work' },
   { label: 'Bio', href: '/bio' },
   { label: 'Contact', href: '/contact' },
 ];

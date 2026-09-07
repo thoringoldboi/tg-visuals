@@ -1,18 +1,15 @@
 ---
 import { Image } from 'astro:assets';
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { films, img } from '../data/work';
-import { contact } from '../config/site';
+import { filmProjects, photoProjects, img } from '../data/work';
 import heroPoster from '../assets/work/hero-poster.jpg';
 import markWhite from '../assets/brand/tg-mark-white.png';
 
-// Portfolio grid — film covers plus a few stills. Swap covers/captions freely.
-const portfolio = [
-  ...films.map((f) => ({ cover: f.cover, title: f.title, meta: f.category })),
-  { cover: 'photo-studio-02', title: 'Studio', meta: 'Photography' },
-  { cover: 'photo-product-01', title: 'Product', meta: 'Photography' },
-  { cover: 'photo-lifestyle-03', title: 'Lifestyle', meta: 'Photography' },
-];
+// Curated best-of for the home page — the full library lives on /work.
+const selected = [
+  ...filmProjects.map((p) => ({ cover: p.cover, title: p.title, meta: p.category })),
+  ...photoProjects.map((p) => ({ cover: p.cover, title: p.title, meta: p.category })),
+].slice(0, 6);
 ---
 
 <BaseLayout overlayHeader>
@@ -44,15 +41,15 @@ const portfolio = [
   <section class="section work" id="work">
     <div class="container">
       <header class="work__head">
-        <h2 class="work__title">Work</h2>
-        <a href={contact.instagram.url} class="link-underline work__ig" target="_blank" rel="noopener">
-          More on Instagram <span aria-hidden="true">↗</span>
+        <h2 class="work__title">Selected work</h2>
+        <a href="/work" class="link-underline work__ig">
+          All work <span aria-hidden="true">↗</span>
         </a>
       </header>
 
       <div class="work__grid">
         {
-          portfolio.map((p) => (
+          selected.map((p) => (
             <figure class="tile" data-reveal>
               <div class="tile__media">
                 <Image
