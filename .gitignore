@@ -22,3 +22,15 @@ pnpm-debug.log*
 
 # jetbrains setting folder
 .idea/
+
+# camera RAW files (never web-servable)
+*.ARW
+*.arw
+*.dng
+*.DNG
+*.cr2
+*.cr3
+*.nef
+*.raf
+*.orf
+*.rw2
