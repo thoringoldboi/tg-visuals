@@ -89,8 +89,14 @@ export interface PhotoAlbum {
   title: string;
   cover: ImageMetadata; // the (B&W) tile image
   hero: ImageMetadata;  // the wide banner on the album page
+  heroFocus: string;    // CSS object-position for the banner crop
   images: ImageMetadata[];
 }
+
+/** Per-album banner crop focal point (object-position). Default centres it. */
+const heroFocus: Record<string, string> = {
+  portraits: '50% 45%', // centre the subject's face in the banner crop
+};
 
 const albumFiles = import.meta.glob<{ default: ImageMetadata }>(
   '../assets/work/photography/*/*.{jpg,jpeg,png,webp,JPG,JPEG,PNG,WEBP}',
@@ -124,12 +130,12 @@ export const photoAlbums: PhotoAlbum[] = Object.keys(grouped)
     const items = grouped[slug].sort((a, b) => a.name.localeCompare(b.name));
     const images = items.map((i) => i.img);
     const cover = items.find((i) => /(^|\/)cover\./i.test(i.name))?.img ?? images[0];
-    // Banner: an explicit hero.* if present, else the widest (most landscape)
-    // image so it fills the wide hero sharply with minimal cropping.
+    // Banner: an explicit hero.* if present, else the album cover. Predictable
+    // (doesn't change when photos are added). Drop a wide `hero.jpg` for a
+    // dedicated banner; adjust the crop per album via `heroFocus` below.
     const heroExplicit = items.find((i) => /(^|\/)hero\./i.test(i.name))?.img;
-    const widest = images.reduce((b, im) => (im.width / im.height > b.width / b.height ? im : b), images[0]);
-    const hero = heroExplicit ?? widest ?? cover;
-    return { slug, title: titleize(slug), cover, hero, images };
+    const hero = heroExplicit ?? cover;
+    return { slug, title: titleize(slug), cover, hero, heroFocus: heroFocus[slug] ?? '50% 50%', images };
   });
 
 // ---------------------------------------------------------------------------

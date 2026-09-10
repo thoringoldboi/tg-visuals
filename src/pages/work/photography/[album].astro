@@ -25,7 +25,7 @@ const larges = await Promise.all(
   <!-- Parallax hero -->
   <header class="album-hero">
     <div class="album-hero__media" data-parallax>
-      <Image src={album.hero} alt={album.title} widths={[1400, 2000, 2560]} sizes="100vw" class="album-hero__img" loading="eager" />
+      <Image src={album.hero} alt={album.title} widths={[1400, 2000, 2560]} sizes="100vw" class="album-hero__img" style={`object-position:${album.heroFocus}`} loading="eager" />
     </div>
     <div class="album-hero__scrim" aria-hidden="true"></div>
     <div class="album-hero__inner container">
