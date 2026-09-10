@@ -84,6 +84,13 @@ const { overlay = false } = Astro.props;
   }
   .nav__link:hover { opacity: 1; }
   .nav__link:hover::after { transform: scaleX(1); transform-origin: left; }
+
+  /* Compact nav on phones so everything fits comfortably */
+  @media (max-width: 560px) {
+    .wordmark { font-size: 0.82rem; letter-spacing: 0.08em; }
+    .nav { gap: 1.1rem; }
+    .nav__link { font-size: 0.82rem; }
+  }
 </style>
 
 <script>
