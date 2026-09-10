@@ -228,13 +228,25 @@ const larges = await Promise.all(
       gallery.classList.add('gallery--masonry');
       gallery.replaceChildren();
       const cols: HTMLElement[] = [];
+      const heights: number[] = [];
       for (let i = 0; i < n; i++) {
         const c = document.createElement('div');
         c.className = 'gallery__col';
         gallery.appendChild(c);
         cols.push(c);
+        heights.push(0);
       }
-      items.forEach((it, i) => cols[i % n].appendChild(it));
+      // Place each image in the currently-shortest column (balances heights,
+      // so columns end together — no big white gaps).
+      items.forEach((it) => {
+        const img = it.querySelector('img');
+        const w = Number(img?.getAttribute('width')) || img?.naturalWidth || 1;
+        const h = Number(img?.getAttribute('height')) || img?.naturalHeight || 1;
+        let min = 0;
+        for (let k = 1; k < n; k++) if (heights[k] < heights[min]) min = k;
+        cols[min].appendChild(it);
+        heights[min] += h / w + 0.06; // relative height + gap allowance
+      });
     };
     build();
     let rt: number | undefined;
