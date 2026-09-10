@@ -97,7 +97,7 @@ const albumFiles = import.meta.glob<{ default: ImageMetadata }>(
 );
 
 /** Preferred display order. Folders not listed appear after, alphabetically. */
-const albumOrder = ['studio', 'automotive', 'event'];
+const albumOrder = ['studio', 'portraits', 'automotive', 'event'];
 
 const titleize = (slug: string) =>
   slug.replace(/[-_]/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase());
