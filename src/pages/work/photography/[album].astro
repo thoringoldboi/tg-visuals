@@ -12,25 +12,37 @@ export function getStaticPaths() {
 
 const { album } = Astro.props;
 
+// The cover leads the page as the hero; the rest fill the gallery.
+const galleryImages =
+  album.images.length > 1 ? album.images.filter((im) => im !== album.cover) : album.images;
+
 // Large versions for the click-to-enlarge lightbox.
 const larges = await Promise.all(
-  album.images.map((src) => getImage({ src, width: 2000, format: 'webp' }))
+  galleryImages.map((src) => getImage({ src, width: 2000, format: 'webp' }))
 );
 ---
 
 <BaseLayout title={`${album.title} — Photography`} description={`${album.title} photography by TG Visuals.`}>
+  <!-- Parallax hero -->
+  <header class="album-hero">
+    <div class="album-hero__media" data-parallax>
+      <Image src={album.cover} alt={album.title} widths={[1200, 1800, 2400]} sizes="100vw" class="album-hero__img" loading="eager" />
+    </div>
+    <div class="album-hero__scrim" aria-hidden="true"></div>
+    <div class="album-hero__inner container">
+      <nav class="crumbs">
+        <a href="/work">Work</a> <span aria-hidden="true">/</span>
+        <a href="/work/photography">Photography</a>
+      </nav>
+      <h1 class="album-hero__title">{album.title}</h1>
+    </div>
+  </header>
+
   <section class="work-sub">
     <div class="container">
-      <nav class="crumbs" data-reveal>
-        <a href="/work">Work</a> <span aria-hidden="true">/</span>
-        <a href="/work/photography">Photography</a> <span aria-hidden="true">/</span>
-        <span class="crumbs__here">{album.title}</span>
-      </nav>
-      <h1 class="work-sub__title" data-reveal style="--reveal-delay:.05s">{album.title}</h1>
-
       <div class="gallery">
         {
-          album.images.map((image, i) => (
+          galleryImages.map((image, i) => (
             <button class="photo" type="button" data-full={larges[i].src} aria-label={`Enlarge ${album.title} photo ${i + 1}`}>
               <Image src={image} alt={`${album.title} ${i + 1}`} widths={[240, 360, 520]} sizes="(max-width:680px) 45vw, (max-width:1000px) 30vw, 22vw" class="photo__img" loading="lazy" />
             </button>
@@ -48,12 +60,56 @@ const larges = await Promise.all(
 </BaseLayout>
 
 <style>
-  .work-sub { padding-top: calc(var(--nav-h) + var(--space-l)); padding-bottom: var(--space-2xl); }
-  .crumbs { font-family: var(--font-display); font-size: var(--step--1); letter-spacing: 0.02em; color: var(--smoke-dim); display: flex; flex-wrap: wrap; gap: 0.5em; }
-  .crumbs a { color: var(--smoke); }
-  .crumbs a:hover { color: var(--ink); }
-  .crumbs__here { color: var(--ink); }
-  .work-sub__title { font-size: var(--step-4); letter-spacing: -0.035em; line-height: 1; margin: 0.25em 0 var(--space-l); }
+  /* Parallax hero */
+  .album-hero {
+    position: relative;
+    margin-top: var(--nav-h);
+    height: clamp(340px, 58vh, 620px);
+    overflow: hidden;
+    background: var(--ink);
+  }
+  .album-hero__media {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 124%;
+    will-change: transform;
+  }
+  .album-hero__img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .album-hero__scrim {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0.28) 0%, rgba(0, 0, 0, 0) 30%, rgba(0, 0, 0, 0.55) 100%);
+  }
+  .album-hero__inner {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding-top: var(--space-l);
+    padding-bottom: var(--space-l);
+    color: #fff;
+  }
+  .album-hero__inner .crumbs {
+    font-family: var(--font-display);
+    font-size: var(--step--1);
+    letter-spacing: 0.02em;
+    display: flex;
+    gap: 0.5em;
+    color: rgba(255, 255, 255, 0.75);
+  }
+  .album-hero__inner .crumbs a { color: rgba(255, 255, 255, 0.75); }
+  .album-hero__inner .crumbs a:hover { color: #fff; }
+  .album-hero__title {
+    font-size: var(--step-5);
+    letter-spacing: -0.04em;
+    line-height: 0.95;
+    color: #fff;
+  }
+
+  .work-sub { padding-top: var(--space-l); padding-bottom: var(--space-2xl); }
 
   /* Masonry columns — small thumbnails */
   .gallery { column-count: 4; column-gap: var(--space-s); }
@@ -112,9 +168,39 @@ const larges = await Promise.all(
     opacity: 0.8;
   }
   .lb__close:hover { opacity: 1; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .album-hero__media { transform: none !important; }
+  }
 </style>
 
 <script>
+  // Subtle parallax on the album hero image.
+  const media = document.querySelector<HTMLElement>('[data-parallax]');
+  const hero = media?.closest<HTMLElement>('.album-hero');
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (media && hero && !reduce) {
+    let ticking = false;
+    const update = () => {
+      const offset = Math.max(0, -hero.getBoundingClientRect().top);
+      const shift = -Math.min(offset * 0.35, hero.offsetHeight * 0.18);
+      media.style.transform = `translate3d(0, ${shift}px, 0)`;
+      ticking = false;
+    };
+    window.addEventListener(
+      'scroll',
+      () => {
+        if (!ticking) {
+          requestAnimationFrame(update);
+          ticking = true;
+        }
+      },
+      { passive: true }
+    );
+    update();
+  }
+
+  // Click-to-enlarge lightbox.
   const lb = document.querySelector<HTMLElement>('[data-lightbox]');
   const lbImg = lb?.querySelector<HTMLImageElement>('.lb__img');
   if (lb && lbImg) {
@@ -131,7 +217,6 @@ const larges = await Promise.all(
     document.querySelectorAll<HTMLButtonElement>('.photo[data-full]').forEach((btn) => {
       btn.addEventListener('click', () => open(btn.dataset.full!));
     });
-    // Click anywhere except the image (backdrop or close button) closes.
     lb.addEventListener('click', (e) => {
       if (e.target !== lbImg) close();
     });
