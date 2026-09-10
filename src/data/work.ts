@@ -109,20 +109,23 @@ const albumOrder = ['studio', 'portraits', 'automotive'];
 const titleize = (slug: string) =>
   slug.replace(/[-_]/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase());
 
-/** Deterministic shuffle (same order every build) so same-shoot photos —
- *  which have consecutive filenames — get spread out instead of clustered. */
-function seededShuffle<T>(arr: T[], seed: number): T[] {
-  const a = arr.slice();
-  let s = seed || 1;
-  const rand = () => {
-    s = (s * 1103515245 + 12345) & 0x7fffffff;
-    return s / 0x7fffffff;
-  };
-  for (let i = a.length - 1; i > 0; i--) {
-    const j = Math.floor(rand() * (i + 1));
-    [a[i], a[j]] = [a[j], a[i]];
+/** Interleave images by shoot/session (the filename prefix before the sequence
+ *  number) so photos from the same shoot are spread evenly across the gallery
+ *  rather than clustered next to each other. Deterministic (stable per build). */
+function interleaveBySession(items: { name: string; img: ImageMetadata }[]): ImageMetadata[] {
+  const sessionOf = (n: string) => n.replace(/\.[^.]+$/, '').replace(/[-_]?\d+$/, '') || n;
+  const groups = new Map<string, ImageMetadata[]>();
+  for (const it of items) {
+    const key = sessionOf(it.name);
+    if (!groups.has(key)) groups.set(key, []);
+    groups.get(key)!.push(it.img);
   }
-  return a;
+  const lists = [...groups.values()];
+  const out: ImageMetadata[] = [];
+  for (let i = 0; out.length < items.length; i++) {
+    for (const list of lists) if (i < list.length) out.push(list[i]);
+  }
+  return out;
 }
 
 const grouped: Record<string, { name: string; img: ImageMetadata }[]> = {};
@@ -151,10 +154,9 @@ export const photoAlbums: PhotoAlbum[] = Object.keys(grouped)
     // dedicated banner; adjust the crop per album via `heroFocus` below.
     const heroExplicit = items.find((i) => /(^|\/)hero\./i.test(i.name))?.img;
     const hero = heroExplicit ?? cover;
-    // Shuffle the gallery order (stable per album) so similar shots aren't adjacent.
-    const seed = [...slug].reduce((sum, ch) => sum + ch.charCodeAt(0), slug.length * 7);
-    const shuffled = seededShuffle(images, seed);
-    return { slug, title: titleize(slug), cover, hero, heroFocus: heroFocus[slug] ?? '50% 50%', images: shuffled };
+    // Spread same-shoot photos across the gallery instead of clustering them.
+    const galleryImages = interleaveBySession(items);
+    return { slug, title: titleize(slug), cover, hero, heroFocus: heroFocus[slug] ?? '50% 50%', images: galleryImages };
   });
 
 // ---------------------------------------------------------------------------
