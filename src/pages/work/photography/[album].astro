@@ -183,7 +183,7 @@ const larges = await Promise.all(
     let ticking = false;
     const update = () => {
       const offset = Math.max(0, -hero.getBoundingClientRect().top);
-      const shift = -Math.min(offset * 0.35, hero.offsetHeight * 0.18);
+      const shift = -Math.min(offset * 0.14, hero.offsetHeight * 0.1);
       media.style.transform = `translate3d(0, ${shift}px, 0)`;
       ticking = false;
     };
