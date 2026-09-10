@@ -154,8 +154,12 @@ export const photoAlbums: PhotoAlbum[] = Object.keys(grouped)
     // dedicated banner; adjust the crop per album via `heroFocus` below.
     const heroExplicit = items.find((i) => /(^|\/)hero\./i.test(i.name))?.img;
     const hero = heroExplicit ?? cover;
-    // Spread same-shoot photos across the gallery instead of clustering them.
-    const galleryImages = interleaveBySession(items);
+    // Manual mode: if any file has a leading number (e.g. "01-foo.jpg"), the
+    // gallery uses your exact numeric order. Otherwise auto-spread by shoot.
+    const manual = items.some((it) => /^\d+[-_. ]/.test(it.name));
+    const galleryImages = manual
+      ? items.slice().sort((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true })).map((i) => i.img)
+      : interleaveBySession(items);
     return { slug, title: titleize(slug), cover, hero, heroFocus: heroFocus[slug] ?? '50% 50%', images: galleryImages };
   });
 
