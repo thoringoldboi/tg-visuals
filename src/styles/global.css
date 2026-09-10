@@ -56,19 +56,19 @@
   --step--1: clamp(0.80rem, 0.76rem + 0.18vw, 0.92rem);
   --step-0:  clamp(1.00rem, 0.95rem + 0.25vw, 1.15rem);
   --step-1:  clamp(1.25rem, 1.13rem + 0.55vw, 1.65rem);
-  --step-2:  clamp(1.70rem, 1.44rem + 1.15vw, 2.60rem);
-  --step-3:  clamp(2.30rem, 1.75rem + 2.45vw, 4.20rem);
-  --step-4:  clamp(3.00rem, 1.90rem + 4.90vw, 6.50rem);
-  --step-5:  clamp(3.60rem, 1.60rem + 8.90vw, 9.50rem);
+  --step-2:  clamp(1.50rem, 1.16rem + 1.45vw, 2.60rem);
+  --step-3:  clamp(1.90rem, 1.15rem + 3.00vw, 4.20rem);
+  --step-4:  clamp(2.40rem, 1.10rem + 5.40vw, 6.50rem);
+  --step-5:  clamp(2.80rem, 0.75rem + 8.70vw, 9.50rem);
 
   /* Spacing rhythm */
   --space-2xs: clamp(0.5rem, 0.45rem + 0.25vw, 0.75rem);
   --space-xs:  clamp(0.75rem, 0.65rem + 0.5vw, 1.1rem);
   --space-s:   clamp(1rem, 0.85rem + 0.75vw, 1.6rem);
   --space-m:   clamp(1.6rem, 1.3rem + 1.5vw, 2.8rem);
-  --space-l:   clamp(2.6rem, 2rem + 3vw, 5rem);
-  --space-xl:  clamp(4rem, 2.8rem + 6vw, 9rem);
-  --space-2xl: clamp(6rem, 4rem + 10vw, 14rem);
+  --space-l:   clamp(1.75rem, 0.8rem + 4.2vw, 5rem);
+  --space-xl:  clamp(2.5rem, 0.5rem + 8.5vw, 9rem);
+  --space-2xl: clamp(3.5rem, 0.6rem + 12.4vw, 13rem);
 
   --container: 1520px;
   --container-narrow: 900px;

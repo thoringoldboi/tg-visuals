@@ -50,7 +50,7 @@ import portrait from '../assets/portrait/thor-portrait.jpg';
   }
   .bio__img {
     width: 100%;
-    max-width: 85%;
+    max-width: 80%;
     aspect-ratio: 4 / 5;
     object-fit: cover;
     object-position: 50% 22%;
@@ -77,6 +77,6 @@ import portrait from '../assets/portrait/thor-portrait.jpg';
   .bio__link { display: inline-block; margin-top: 1.8em; color: var(--ink); }
   @media (max-width: 820px) {
     .bio__grid { grid-template-columns: 1fr; }
-    .bio__img { aspect-ratio: 3 / 4; max-height: 70vh; }
+    .bio__img { max-width: 100%; aspect-ratio: 3 / 4; max-height: 70vh; }
   }
 </style>
