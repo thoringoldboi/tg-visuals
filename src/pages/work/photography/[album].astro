@@ -12,11 +12,8 @@ export function getStaticPaths() {
 
 const { album } = Astro.props;
 
-// The hero leads the page; the rest fill the gallery.
-const galleryImages = (() => {
-  const rest = album.images.filter((im) => im !== album.hero && im !== album.cover);
-  return rest.length ? rest : album.images;
-})();
+// The hero leads the page as a banner; the gallery shows EVERY image in the album.
+const galleryImages = album.images;
 
 // Large versions for the click-to-enlarge lightbox.
 const larges = await Promise.all(
