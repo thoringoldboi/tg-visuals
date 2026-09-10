@@ -6,7 +6,12 @@ import heroPoster from '../assets/work/hero-poster.jpg';
 import markWhite from '../assets/brand/tg-mark-white.png';
 
 // Curated best-of for the home page — the full library lives on /work.
-const selected = photoAlbums.slice(0, 3).map((a) => ({ src: a.cover, title: a.title, meta: 'Photography' }));
+const selected = photoAlbums.slice(0, 3).map((a) => ({
+  src: a.cover,
+  title: a.title,
+  meta: 'Photography',
+  href: `/work/photography/${a.slug}`,
+}));
 ---
 
 <BaseLayout overlayHeader>
@@ -47,7 +52,7 @@ const selected = photoAlbums.slice(0, 3).map((a) => ({ src: a.cover, title: a.ti
       <div class="work__grid">
         {
           selected.map((p) => (
-            <figure class="tile" data-reveal>
+            <a class="tile" href={p.href} data-reveal>
               <div class="tile__media">
                 <Image
                   src={p.src}
@@ -58,11 +63,11 @@ const selected = photoAlbums.slice(0, 3).map((a) => ({ src: a.cover, title: a.ti
                   loading="lazy"
                 />
               </div>
-              <figcaption class="tile__cap">
+              <div class="tile__cap">
                 <span class="tile__name">{p.title}</span>
                 <span class="tile__meta">{p.meta}</span>
-              </figcaption>
-            </figure>
+              </div>
+            </a>
           ))
         }
       </div>
@@ -186,7 +191,7 @@ const selected = photoAlbums.slice(0, 3).map((a) => ({ src: a.cover, title: a.ti
     grid-template-columns: repeat(3, 1fr);
     gap: var(--space-m) var(--space-s);
   }
-  .tile { margin: 0; }
+  .tile { display: block; color: inherit; }
   .tile__media {
     aspect-ratio: 4 / 3;
     overflow: hidden;
