@@ -92,7 +92,7 @@ export interface PhotoAlbum {
 }
 
 const albumFiles = import.meta.glob<{ default: ImageMetadata }>(
-  '../assets/work/photography/*/*.{jpg,jpeg,png,webp}',
+  '../assets/work/photography/*/*.{jpg,jpeg,png,webp,JPG,JPEG,PNG,WEBP}',
   { eager: true }
 );
 
