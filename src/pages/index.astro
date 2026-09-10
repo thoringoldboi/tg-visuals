@@ -106,7 +106,7 @@ const selected = photoAlbums.slice(0, 3).map((a) => ({
   .hero__scrim {
     position: absolute;
     inset: 0;
-    background: rgba(0, 0, 0, 0.42);
+    background: rgba(0, 0, 0, 0.2);
     z-index: 2;
   }
   .hero__center { z-index: 3; }
@@ -125,19 +125,20 @@ const selected = photoAlbums.slice(0, 3).map((a) => ({
   .hero__lockup {
     display: flex;
     align-items: center;
-    gap: clamp(0.7rem, 1.4vw, 1.1rem);
-    filter: drop-shadow(0 4px 30px rgba(0, 0, 0, 0.35));
+    gap: clamp(0.6rem, 1.2vw, 0.95rem);
+    /* Invert/blend against the video behind it instead of stark white */
+    mix-blend-mode: difference;
   }
   .hero__logo {
     width: auto;
-    height: clamp(42px, 5vw, 68px);
+    height: clamp(34px, 4vw, 54px);
   }
   .hero__word {
     font-family: var(--font-display);
     font-weight: 500;
-    font-size: clamp(1.25rem, 1rem + 1.6vw, 2rem);
-    letter-spacing: 0.34em;
-    text-indent: 0.34em;
+    font-size: clamp(1rem, 0.85rem + 0.9vw, 1.55rem);
+    letter-spacing: 0.32em;
+    text-indent: 0.32em;
     text-transform: uppercase;
     color: #fff;
   }
