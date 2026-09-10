@@ -111,23 +111,29 @@ const larges = await Promise.all(
 
   .work-sub { padding-top: var(--space-l); padding-bottom: var(--space-2xl); }
 
-  /* Masonry columns — small thumbnails */
-  .gallery { column-count: 4; column-gap: var(--space-s); }
+  /* Fallback grid (no-JS): even, cropped. JS upgrades this to balanced masonry. */
+  .gallery { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--space-s); align-items: start; }
+  @media (max-width: 1000px) { .gallery { grid-template-columns: repeat(3, 1fr); } }
+  @media (max-width: 680px) { .gallery { grid-template-columns: repeat(2, 1fr); } }
   .photo {
     display: block;
     width: 100%;
-    margin: 0 0 var(--space-s);
+    margin: 0;
     padding: 0;
     border: 0;
-    background: none;
+    background: var(--charcoal);
     cursor: zoom-in;
-    break-inside: avoid;
     overflow: hidden;
+    aspect-ratio: 4 / 5;
   }
-  .photo__img { width: 100%; height: auto; display: block; transition: opacity var(--dur) var(--ease); }
-  .photo:hover .photo__img { opacity: 0.86; }
-  @media (max-width: 1000px) { .gallery { column-count: 3; } }
-  @media (max-width: 680px) { .gallery { column-count: 2; } }
+  .photo__img { width: 100%; height: 100%; object-fit: cover; display: block; transition: opacity var(--dur) var(--ease); }
+  .photo:hover .photo__img { opacity: 0.92; }
+
+  /* Balanced masonry (JS): natural shapes, columns evenly filled → staggered but tidy */
+  .gallery--masonry { display: flex; }
+  .gallery--masonry > .gallery__col { display: flex; flex-direction: column; gap: var(--space-s); flex: 1 1 0; min-width: 0; }
+  .gallery--masonry .photo { aspect-ratio: auto; }
+  .gallery--masonry .photo__img { height: auto; }
 
   /* Lightbox */
   .lb {
@@ -198,6 +204,42 @@ const larges = await Promise.all(
       { passive: true }
     );
     update();
+  }
+
+  // Balanced masonry: distribute photos evenly across columns (no lonely column),
+  // keeping natural shapes for the staggered look. Responsive.
+  const gallery = document.querySelector<HTMLElement>('.gallery');
+  if (gallery) {
+    const items = Array.from(gallery.children).filter((el) =>
+      el.classList.contains('photo')
+    ) as HTMLElement[];
+    const colCount = () => (window.innerWidth <= 680 ? 2 : window.innerWidth <= 1000 ? 3 : 4);
+    let current = -1;
+    const build = () => {
+      const n = colCount();
+      if (n === current) return;
+      current = n;
+      gallery.classList.add('gallery--masonry');
+      gallery.replaceChildren();
+      const cols: HTMLElement[] = [];
+      for (let i = 0; i < n; i++) {
+        const c = document.createElement('div');
+        c.className = 'gallery__col';
+        gallery.appendChild(c);
+        cols.push(c);
+      }
+      items.forEach((it, i) => cols[i % n].appendChild(it));
+    };
+    build();
+    let rt: number | undefined;
+    window.addEventListener(
+      'resize',
+      () => {
+        window.clearTimeout(rt);
+        rt = window.setTimeout(build, 150);
+      },
+      { passive: true }
+    );
   }
 
   // Click-to-enlarge lightbox.
