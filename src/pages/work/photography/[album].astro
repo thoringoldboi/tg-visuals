@@ -12,9 +12,11 @@ export function getStaticPaths() {
 
 const { album } = Astro.props;
 
-// The cover leads the page as the hero; the rest fill the gallery.
-const galleryImages =
-  album.images.length > 1 ? album.images.filter((im) => im !== album.cover) : album.images;
+// The hero leads the page; the rest fill the gallery.
+const galleryImages = (() => {
+  const rest = album.images.filter((im) => im !== album.hero && im !== album.cover);
+  return rest.length ? rest : album.images;
+})();
 
 // Large versions for the click-to-enlarge lightbox.
 const larges = await Promise.all(
@@ -26,7 +28,7 @@ const larges = await Promise.all(
   <!-- Parallax hero -->
   <header class="album-hero">
     <div class="album-hero__media" data-parallax>
-      <Image src={album.cover} alt={album.title} widths={[1200, 1800, 2400]} sizes="100vw" class="album-hero__img" loading="eager" />
+      <Image src={album.hero} alt={album.title} widths={[1400, 2000, 2560]} sizes="100vw" class="album-hero__img" loading="eager" />
     </div>
     <div class="album-hero__scrim" aria-hidden="true"></div>
     <div class="album-hero__inner container">

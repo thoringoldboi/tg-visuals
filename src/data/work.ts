@@ -87,7 +87,8 @@ export const social: SocialClip[] = [
 export interface PhotoAlbum {
   slug: string;
   title: string;
-  cover: ImageMetadata;
+  cover: ImageMetadata; // the (B&W) tile image
+  hero: ImageMetadata;  // the wide banner on the album page
   images: ImageMetadata[];
 }
 
@@ -123,7 +124,12 @@ export const photoAlbums: PhotoAlbum[] = Object.keys(grouped)
     const items = grouped[slug].sort((a, b) => a.name.localeCompare(b.name));
     const images = items.map((i) => i.img);
     const cover = items.find((i) => /(^|\/)cover\./i.test(i.name))?.img ?? images[0];
-    return { slug, title: titleize(slug), cover, images };
+    // Banner: an explicit hero.* if present, else the widest (most landscape)
+    // image so it fills the wide hero sharply with minimal cropping.
+    const heroExplicit = items.find((i) => /(^|\/)hero\./i.test(i.name))?.img;
+    const widest = images.reduce((b, im) => (im.width / im.height > b.width / b.height ? im : b), images[0]);
+    const hero = heroExplicit ?? widest ?? cover;
+    return { slug, title: titleize(slug), cover, hero, images };
   });
 
 // ---------------------------------------------------------------------------
