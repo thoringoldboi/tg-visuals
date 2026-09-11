@@ -95,7 +95,7 @@ export interface PhotoAlbum {
 
 /** Per-album banner crop focal point (object-position). Default centres it. */
 const heroFocus: Record<string, string> = {
-  portraits: '50% 62%', // centre the subject's face in the banner crop
+  portraits: '50% 38%', // centre the subject's face in the banner crop
 };
 
 const albumFiles = import.meta.glob<{ default: ImageMetadata }>(
