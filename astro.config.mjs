@@ -5,7 +5,7 @@ import sitemap from '@astrojs/sitemap';
 // Update `site` if you later add a custom domain (e.g. tgvisuals.com).
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://tg-visuals.vercel.app',
+  site: 'https://thoringoldswain.com',
   integrations: [sitemap()],
   build: {
     inlineStylesheets: 'auto',

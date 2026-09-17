@@ -12,7 +12,7 @@ export const site = {
   description:
     'Premium video production, photography and social media content by TG Visuals. High-end visuals designed to capture attention, build brands and drive results.',
   /** Production URL. Update if you add a custom domain later. */
-  url: 'https://tg-visuals.vercel.app',
+  url: 'https://thoringoldswain.com',
   locale: 'en_ZA',
   /** Headline credibility figure. */
   views: '2M+',
