@@ -81,6 +81,15 @@ const selected = photoAlbums.slice(0, 3).map((a) => ({
     background: #000;
     isolation: isolate; /* contain the logo's blend to the hero (blend vs video) */
   }
+  /* On phones the landscape showreel is heavily side-cropped by object-fit:cover.
+     A slightly shorter hero reduces that crop (shows more of the frame) without
+     introducing letterbox bars. */
+  @media (max-width: 560px) {
+    .hero {
+      height: 84svh;
+      min-height: 460px;
+    }
+  }
   .hero__poster {
     position: absolute;
     inset: 0;
