@@ -107,6 +107,7 @@ export const films: VideoItem[] = [
 /** Vertical clips / Shorts. Paste YouTube URLs here. */
 export const socialVideos: VideoItem[] = [
   { url: 'https://youtube.com/shorts/qmxlGgqgvWk' },
+  { url: 'https://youtu.be/LIaMEqJyKXc', vertical: true },
 ];
 
 export interface ResolvedVideo {
