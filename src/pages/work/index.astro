@@ -1,8 +1,12 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import { films, socialVideos } from '../../data/work';
+
+// Video unlocks automatically once you paste a Vimeo link into work.ts.
+const videoReady = films.length + socialVideos.length > 0;
 
 const folders = [
-  { href: '/work/video', title: 'Video', meta: 'Film · Commercial · Social', soon: true },
+  { href: '/work/video', title: 'Video', meta: 'Film · Commercial · Social', soon: !videoReady },
   { href: '/work/photography', title: 'Photography', meta: 'Studio · Portraits · Automotive' },
 ];
 ---

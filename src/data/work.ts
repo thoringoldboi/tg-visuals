@@ -75,6 +75,78 @@ export const social: SocialClip[] = [
 ];
 
 // ---------------------------------------------------------------------------
+// VIDEO — Vimeo (PASTE-AND-GO).
+//
+// To add a film: upload it to Vimeo, copy its share URL, and paste it below.
+// The title, thumbnail and aspect ratio are pulled from Vimeo automatically —
+// you don't need to add images or anything else.
+//   • Landscape films / commercials → `films`
+//   • Vertical social clips (Reels/TikToks re-uploaded to Vimeo) → `socialVideos`
+//   • Optional: add a `category` label (e.g. 'Commercial', 'Automotive').
+// The Video section stays "Coming soon" until at least one link is added here.
+// ---------------------------------------------------------------------------
+export interface VimeoItem {
+  url: string;
+  /** Optional override; if omitted, the Vimeo title is used. */
+  title?: string;
+  /** Optional label shown under the title (e.g. 'Commercial'). */
+  category?: string;
+}
+
+/** Landscape films & commercials. Paste Vimeo URLs here. */
+export const films: VimeoItem[] = [
+  // { url: 'https://vimeo.com/123456789', category: 'Commercial' },
+];
+
+/** Vertical social clips (uploaded to Vimeo). Paste Vimeo URLs here. */
+export const socialVideos: VimeoItem[] = [
+  // { url: 'https://vimeo.com/123456789' },
+];
+
+export interface ResolvedVideo {
+  url: string;
+  id: string;
+  title: string;
+  category: string;
+  thumb: string;
+  vertical: boolean;
+}
+
+/** Look up title/thumbnail/aspect for each Vimeo URL at build time via oEmbed
+ *  (no API key needed for public videos). Falls back gracefully if offline. */
+export async function resolveVimeo(items: VimeoItem[]): Promise<ResolvedVideo[]> {
+  return Promise.all(
+    items.map(async (it) => {
+      const idFromUrl = it.url.match(/vimeo\.com\/(?:video\/)?(\d+)/)?.[1] ?? '';
+      try {
+        const res = await fetch(
+          `https://vimeo.com/api/oembed.json?url=${encodeURIComponent(it.url)}&width=1280`
+        );
+        if (!res.ok) throw new Error(`oEmbed ${res.status}`);
+        const d: any = await res.json();
+        return {
+          url: it.url,
+          id: String(d.video_id ?? idFromUrl),
+          title: it.title ?? d.title ?? 'Film',
+          category: it.category ?? '',
+          thumb: d.thumbnail_url ?? '',
+          vertical: Number(d.height) > Number(d.width),
+        };
+      } catch {
+        return {
+          url: it.url,
+          id: idFromUrl,
+          title: it.title ?? 'Film',
+          category: it.category ?? '',
+          thumb: '',
+          vertical: false,
+        };
+      }
+    })
+  );
+}
+
+// ---------------------------------------------------------------------------
 // PHOTOGRAPHY — Albums (DROP-AND-GO).
 //
 // Each folder in  /src/assets/work/photography/<album>/  becomes an album
