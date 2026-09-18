@@ -2,7 +2,7 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 
 const folders = [
-  { href: '/work/video', title: 'Video', meta: 'Film · Commercial · Social' },
+  { href: '/work/video', title: 'Video', meta: 'Film · Commercial · Social', soon: true },
   { href: '/work/photography', title: 'Photography', meta: 'Studio · Portraits · Automotive' },
 ];
 ---
@@ -15,13 +15,28 @@ const folders = [
 
       <div class="folders">
         {
-          folders.map((f, i) => (
-            <a href={f.href} class="folder" data-reveal style={`--reveal-delay:${0.08 + i * 0.06}s`}>
-              <span class="folder__arrow" aria-hidden="true">↗</span>
-              <span class="folder__title">{f.title}</span>
-              <span class="folder__meta">{f.meta}</span>
-            </a>
-          ))
+          folders.map((f, i) => {
+            const Tag = f.soon ? 'div' : 'a';
+            return (
+              <Tag
+                {...(f.soon ? { 'aria-disabled': 'true' } : { href: f.href })}
+                class:list={['folder', { 'folder--soon': f.soon }]}
+                data-reveal
+                style={`--reveal-delay:${0.08 + i * 0.06}s`}
+              >
+                {f.soon ? (
+                  <span class="folder__badge">
+                    <span class="folder__badge-icon" aria-hidden="true">🚧</span>
+                    Coming soon
+                  </span>
+                ) : (
+                  <span class="folder__arrow" aria-hidden="true">↗</span>
+                )}
+                <span class="folder__title">{f.title}</span>
+                <span class="folder__meta">{f.meta}</span>
+              </Tag>
+            );
+          })
         }
       </div>
     </div>
@@ -57,6 +72,34 @@ const folders = [
     transition: background var(--dur) var(--ease), color var(--dur) var(--ease);
   }
   .folder:hover { background: var(--ink); color: var(--paper); }
+
+  /* Coming-soon folder: not a link, muted, no hover invert */
+  .folder--soon {
+    cursor: not-allowed;
+    border-style: dashed;
+    color: var(--smoke-dim);
+  }
+  .folder--soon .folder__title { color: var(--smoke); }
+  .folder--soon:hover { background: var(--paper); color: var(--smoke-dim); }
+  .folder__badge {
+    position: absolute;
+    top: var(--space-m);
+    right: var(--space-m);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45em;
+    padding: 0.4em 0.7em;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    font-family: var(--font-display);
+    font-size: var(--step--1);
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    color: var(--smoke);
+    background: var(--paper-2);
+    white-space: nowrap;
+  }
+  .folder__badge-icon { font-size: 1.05em; }
   .folder__title {
     font-family: var(--font-display);
     font-size: var(--step-4);
