@@ -46,10 +46,12 @@ const year = new Date().getFullYear();
   .site-footer__email {
     font-family: var(--font-display);
     font-weight: 600;
-    font-size: clamp(1.8rem, 1rem + 4vw, 4rem);
+    font-size: clamp(1.05rem, 5.4vw, 4rem);
     letter-spacing: -0.03em;
     color: var(--white);
     margin: 0.5em 0 0.9em;
+    max-width: 100%;
+    overflow-wrap: anywhere;
     transition: opacity var(--dur) var(--ease);
   }
   .site-footer__email:hover { opacity: 0.7; }
