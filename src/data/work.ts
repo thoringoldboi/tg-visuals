@@ -109,6 +109,7 @@ export const films: VideoItem[] = [
 export const socialVideos: VideoItem[] = [
   { url: 'https://youtube.com/shorts/qmxlGgqgvWk' },
   { url: 'https://www.youtube.com/shorts/rbZB-QrkP6Q' },
+  { url: 'https://youtube.com/shorts/JQkN7AVC2QI' },
 ];
 
 export interface ResolvedVideo {
