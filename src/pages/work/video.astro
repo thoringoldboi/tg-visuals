@@ -27,7 +27,7 @@ const hasVideos = filmVids.length + socialVids.length > 0;
           <div class="wgroup__head"><h2 class="wgroup__title">Film &amp; Commercial</h2></div>
           <div class="film-grid">
             {filmVids.map((v) => (
-              <button class="film" type="button" data-video={v.id} data-reveal aria-label={`Play ${v.title}`}>
+              <button class:list={['film', { 'film--v': v.vertical }]} type="button" data-video={v.id} data-vertical={v.vertical ? 'true' : 'false'} data-reveal aria-label={`Play ${v.title}`}>
                 <div class="film__media">
                   {v.thumb ? <img src={v.thumb} alt={v.title} class="vimg" loading="lazy" onerror="this.onerror=null;this.src=this.src.replace('maxresdefault','hqdefault')" /> : <span class="film__ph" aria-hidden="true" />}
                   <span class="film__play" aria-hidden="true">
@@ -52,7 +52,7 @@ const hasVideos = filmVids.length + socialVids.length > 0;
           </div>
           <div class="social-grid">
             {socialVids.map((v) => (
-              <button class="clip" type="button" data-video={v.id} data-reveal aria-label={`Play ${v.title}`}>
+              <button class="clip" type="button" data-video={v.id} data-vertical="true" data-reveal aria-label={`Play ${v.title}`}>
                 <div class="clip__media">
                   {v.thumb ? <img src={v.thumb} alt={v.title} class="vimg" loading="lazy" onerror="this.onerror=null;this.src=this.src.replace('maxresdefault','hqdefault')" /> : <span class="film__ph" aria-hidden="true" />}
                   <span class="film__play" aria-hidden="true">
@@ -127,8 +127,10 @@ const hasVideos = filmVids.length + socialVids.length > 0;
     width: 100%;
   }
 
-  .film-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--space-m) var(--space-s); }
+  .film-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--space-m) var(--space-s); align-items: start; }
   .film__media { position: relative; aspect-ratio: 16 / 9; overflow: hidden; background: var(--charcoal); }
+  /* A vertical film sits in the landscape grid as a properly-sized 9:16 card. */
+  .film--v .film__media { aspect-ratio: 9 / 16; max-width: 300px; }
   .film:hover .vimg { transform: scale(1.04); }
   .film__play {
     position: absolute; inset: 0; display: grid; place-items: center;
@@ -217,7 +219,7 @@ const hasVideos = filmVids.length + socialVids.length > 0;
   document.querySelectorAll<HTMLElement>('[data-video]').forEach((el) => {
     el.addEventListener('click', () => {
       const id = el.dataset.video || '';
-      const vertical = el.classList.contains('clip');
+      const vertical = el.dataset.vertical === 'true';
       if (id) open(id, vertical);
     });
   });
