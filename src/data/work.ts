@@ -75,32 +75,36 @@ export const social: SocialClip[] = [
 ];
 
 // ---------------------------------------------------------------------------
-// VIDEO — Vimeo (PASTE-AND-GO).
+// VIDEO — YouTube (PASTE-AND-GO).
 //
-// To add a film: upload it to Vimeo, copy its share URL, and paste it below.
-// The title, thumbnail and aspect ratio are pulled from Vimeo automatically —
-// you don't need to add images or anything else.
+// To add a film: upload it to YouTube, copy its link, and paste it below.
+// The thumbnail is built automatically from the video ID, and the title is
+// pulled from YouTube — you don't need to add images or anything else.
 //   • Landscape films / commercials → `films`
-//   • Vertical social clips (Reels/TikToks re-uploaded to Vimeo) → `socialVideos`
+//   • Vertical clips (YouTube Shorts) → `socialVideos` (auto-detected as vertical)
 //   • Optional: add a `category` label (e.g. 'Commercial', 'Automotive').
+//   • Optional: `vertical: true` forces a vertical layout for a non-Shorts URL.
+// Accepts any YouTube URL form: watch?v=…, youtu.be/…, /shorts/…, /embed/…
 // The Video section stays "Coming soon" until at least one link is added here.
 // ---------------------------------------------------------------------------
-export interface VimeoItem {
+export interface VideoItem {
   url: string;
-  /** Optional override; if omitted, the Vimeo title is used. */
+  /** Optional override; if omitted, the YouTube title is used. */
   title?: string;
   /** Optional label shown under the title (e.g. 'Commercial'). */
   category?: string;
+  /** Force a vertical (9:16) layout for a non-Shorts URL. */
+  vertical?: boolean;
 }
 
-/** Landscape films & commercials. Paste Vimeo URLs here. */
-export const films: VimeoItem[] = [
-  // { url: 'https://vimeo.com/123456789', category: 'Commercial' },
+/** Landscape films & commercials. Paste YouTube URLs here. */
+export const films: VideoItem[] = [
+  // { url: 'https://youtu.be/dQw4w9WgXcQ', category: 'Commercial' },
 ];
 
-/** Vertical social clips (uploaded to Vimeo). Paste Vimeo URLs here. */
-export const socialVideos: VimeoItem[] = [
-  // { url: 'https://vimeo.com/123456789' },
+/** Vertical clips / Shorts. Paste YouTube URLs here. */
+export const socialVideos: VideoItem[] = [
+  // { url: 'https://www.youtube.com/shorts/abc123XYZ99' },
 ];
 
 export interface ResolvedVideo {
@@ -112,36 +116,42 @@ export interface ResolvedVideo {
   vertical: boolean;
 }
 
-/** Look up title/thumbnail/aspect for each Vimeo URL at build time via oEmbed
- *  (no API key needed for public videos). Falls back gracefully if offline. */
-export async function resolveVimeo(items: VimeoItem[]): Promise<ResolvedVideo[]> {
+/** Extract the 11-char YouTube video id from any common URL form. */
+export const youTubeId = (url: string): string =>
+  url.match(
+    /(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|shorts\/|v\/|live\/))([\w-]{11})/
+  )?.[1] ?? '';
+
+/** Resolve title/thumbnail/aspect for each YouTube URL. Thumbnail is built from
+ *  the id (no request); the title is fetched via oEmbed at build (no API key),
+ *  falling back gracefully if offline. */
+export async function resolveVideos(items: VideoItem[]): Promise<ResolvedVideo[]> {
   return Promise.all(
     items.map(async (it) => {
-      const idFromUrl = it.url.match(/vimeo\.com\/(?:video\/)?(\d+)/)?.[1] ?? '';
-      try {
-        const res = await fetch(
-          `https://vimeo.com/api/oembed.json?url=${encodeURIComponent(it.url)}&width=1280`
-        );
-        if (!res.ok) throw new Error(`oEmbed ${res.status}`);
-        const d: any = await res.json();
-        return {
-          url: it.url,
-          id: String(d.video_id ?? idFromUrl),
-          title: it.title ?? d.title ?? 'Film',
-          category: it.category ?? '',
-          thumb: d.thumbnail_url ?? '',
-          vertical: Number(d.height) > Number(d.width),
-        };
-      } catch {
-        return {
-          url: it.url,
-          id: idFromUrl,
-          title: it.title ?? 'Film',
-          category: it.category ?? '',
-          thumb: '',
-          vertical: false,
-        };
+      const id = youTubeId(it.url);
+      const vertical = it.vertical ?? /\/shorts\//.test(it.url);
+      let title = it.title ?? '';
+      if (!title) {
+        try {
+          const res = await fetch(
+            `https://www.youtube.com/oembed?url=${encodeURIComponent(it.url)}&format=json`
+          );
+          if (res.ok) {
+            const d: any = await res.json();
+            title = d.title ?? '';
+          }
+        } catch {
+          /* offline — fall through to default */
+        }
       }
+      return {
+        url: it.url,
+        id,
+        title: title || 'Film',
+        category: it.category ?? '',
+        thumb: id ? `https://i.ytimg.com/vi/${id}/maxresdefault.jpg` : '',
+        vertical,
+      };
     })
   );
 }

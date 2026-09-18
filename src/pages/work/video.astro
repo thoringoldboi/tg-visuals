@@ -1,10 +1,10 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import { films, socialVideos, resolveVimeo } from '../../data/work';
+import { films, socialVideos, resolveVideos } from '../../data/work';
 import { site } from '../../config/site';
 
-const filmVids = await resolveVimeo(films);
-const socialVids = await resolveVimeo(socialVideos);
+const filmVids = await resolveVideos(films);
+const socialVids = await resolveVideos(socialVideos);
 const hasVideos = filmVids.length + socialVids.length > 0;
 ---
 
@@ -27,9 +27,9 @@ const hasVideos = filmVids.length + socialVids.length > 0;
           <div class="wgroup__head"><h2 class="wgroup__title">Film &amp; Commercial</h2></div>
           <div class="film-grid">
             {filmVids.map((v) => (
-              <button class="film" type="button" data-vimeo={v.id} data-reveal aria-label={`Play ${v.title}`}>
+              <button class="film" type="button" data-video={v.id} data-reveal aria-label={`Play ${v.title}`}>
                 <div class="film__media">
-                  {v.thumb ? <img src={v.thumb} alt={v.title} class="vimg" loading="lazy" /> : <span class="film__ph" aria-hidden="true" />}
+                  {v.thumb ? <img src={v.thumb} alt={v.title} class="vimg" loading="lazy" onerror="this.onerror=null;this.src=this.src.replace('maxresdefault','hqdefault')" /> : <span class="film__ph" aria-hidden="true" />}
                   <span class="film__play" aria-hidden="true">
                     <svg viewBox="0 0 24 24" width="22" height="22"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
                   </span>
@@ -52,9 +52,9 @@ const hasVideos = filmVids.length + socialVids.length > 0;
           </div>
           <div class="social-grid">
             {socialVids.map((v) => (
-              <button class="clip" type="button" data-vimeo={v.id} data-reveal aria-label={`Play ${v.title}`}>
+              <button class="clip" type="button" data-video={v.id} data-reveal aria-label={`Play ${v.title}`}>
                 <div class="clip__media">
-                  {v.thumb ? <img src={v.thumb} alt={v.title} class="vimg" loading="lazy" /> : <span class="film__ph" aria-hidden="true" />}
+                  {v.thumb ? <img src={v.thumb} alt={v.title} class="vimg" loading="lazy" onerror="this.onerror=null;this.src=this.src.replace('maxresdefault','hqdefault')" /> : <span class="film__ph" aria-hidden="true" />}
                   <span class="film__play" aria-hidden="true">
                     <svg viewBox="0 0 24 24" width="20" height="20"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
                   </span>
@@ -198,11 +198,11 @@ const hasVideos = filmVids.length + socialVids.length > 0;
 
   function open(id: string, vertical: boolean) {
     if (!box || !frame) return;
-    const params = 'autoplay=1&title=0&byline=0&portrait=0&dnt=1';
+    const params = 'autoplay=1&rel=0&modestbranding=1&playsinline=1';
     frame.classList.toggle('is-vertical', vertical);
     frame.innerHTML =
-      `<iframe src="https://player.vimeo.com/video/${id}?${params}" ` +
-      `allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>`;
+      `<iframe src="https://www.youtube.com/embed/${id}?${params}" ` +
+      `allow="autoplay; fullscreen; picture-in-picture; encrypted-media" allowfullscreen></iframe>`;
     box.hidden = false;
     document.body.style.overflow = 'hidden';
   }
@@ -214,9 +214,9 @@ const hasVideos = filmVids.length + socialVids.length > 0;
     document.body.style.overflow = '';
   }
 
-  document.querySelectorAll<HTMLElement>('[data-vimeo]').forEach((el) => {
+  document.querySelectorAll<HTMLElement>('[data-video]').forEach((el) => {
     el.addEventListener('click', () => {
-      const id = el.dataset.vimeo || '';
+      const id = el.dataset.video || '';
       const vertical = el.classList.contains('clip');
       if (id) open(id, vertical);
     });
