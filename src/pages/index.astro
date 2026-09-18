@@ -32,11 +32,6 @@ const selected = photoAlbums.slice(0, 3).map((a) => ({
         <span class="hero__word">VISUALS</span>
       </div>
     </div>
-
-    <a href="#work" class="hero__scroll" aria-label="Scroll to work">
-      <span>Scroll</span>
-      <span class="hero__scroll-line" aria-hidden="true"></span>
-    </a>
   </section>
 
   <!-- ============================ WORK ============================ -->
@@ -111,7 +106,6 @@ const selected = photoAlbums.slice(0, 3).map((a) => ({
     z-index: 2;
   }
   .hero__center { z-index: 3; }
-  .hero__scroll { z-index: 3; }
   .hero__center {
     position: absolute;
     inset: 0;
@@ -143,36 +137,6 @@ const selected = photoAlbums.slice(0, 3).map((a) => ({
     text-transform: uppercase;
     color: #fff;
   }
-  .hero__scroll {
-    position: absolute;
-    left: 50%;
-    bottom: var(--space-m);
-    transform: translateX(-50%);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.7em;
-    font-family: var(--font-display);
-    font-size: 0.68rem;
-    letter-spacing: 0.24em;
-    text-transform: uppercase;
-    color: rgba(255, 255, 255, 0.85);
-  }
-  .hero__scroll-line {
-    width: 1px;
-    height: 46px;
-    background: rgba(255, 255, 255, 0.6);
-    animation: scrollpulse 2.2s var(--ease) infinite;
-    transform-origin: top;
-  }
-  @keyframes scrollpulse {
-    0%, 100% { transform: scaleY(0.4); opacity: 0.4; }
-    50% { transform: scaleY(1); opacity: 1; }
-  }
-  @media (prefers-reduced-motion: reduce) {
-    .hero__scroll-line { animation: none; }
-  }
-
   /* ---------------- Work / portfolio ---------------- */
   .work__head {
     display: flex;
