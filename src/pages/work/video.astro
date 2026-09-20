@@ -24,7 +24,7 @@ const hasVideos = filmVids.length + socialVids.length > 0;
 
       {filmVids.length > 0 && (
         <section class="wgroup">
-          <div class="wgroup__head"><h2 class="wgroup__title">Film &amp; Commercial</h2></div>
+          <div class="wgroup__head"><h2 class="wgroup__title">Recent work</h2></div>
           <div class="film-grid">
             {filmVids.map((v) => (
               <button class:list={['film', { 'film--v': v.vertical }]} type="button" data-video={v.id} data-vertical={v.vertical ? 'true' : 'false'} data-reveal aria-label={`Play ${v.title}`}>
