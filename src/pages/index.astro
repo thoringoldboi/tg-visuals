@@ -160,7 +160,7 @@ const videoThumb = filmId ? `https://i.ytimg.com/vi/${filmId}/maxresdefault.jpg`
   }
   .lane { display: block; color: inherit; }
   .lane__media {
-    aspect-ratio: 4 / 5;
+    aspect-ratio: 3 / 2;
     overflow: hidden;
     background: var(--charcoal);
   }
@@ -197,7 +197,7 @@ const videoThumb = filmId ? `https://i.ytimg.com/vi/${filmId}/maxresdefault.jpg`
   .lane:hover .lane__arrow { transform: translate(4px, -4px); color: var(--ink); }
   @media (max-width: 640px) {
     .lanes__grid { grid-template-columns: 1fr; gap: var(--space-l); }
-    .lane__media { aspect-ratio: 4 / 3; }
+    .lane__media { aspect-ratio: 3 / 2; }
   }
 
   /* ---------------- CTA ---------------- */
