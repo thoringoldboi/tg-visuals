@@ -153,6 +153,7 @@ const videoThumb = filmId ? `https://i.ytimg.com/vi/${filmId}/maxresdefault.jpg`
     color: #fff;
   }
   /* ---------------- Lanes (Video / Photography) ---------------- */
+  .lanes { padding-block: var(--space-2xl) var(--space-m); }
   .lanes__grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -202,8 +203,7 @@ const videoThumb = filmId ? `https://i.ytimg.com/vi/${filmId}/maxresdefault.jpg`
 
   /* ---------------- CTA ---------------- */
   .cta {
-    padding-block: var(--space-2xl);
-    border-top: 1px solid var(--line-soft);
+    padding-block: var(--space-m) var(--space-2xl);
     text-align: center;
   }
   .cta__inner {
