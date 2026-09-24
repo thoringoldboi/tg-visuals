@@ -104,6 +104,7 @@ export const films: VideoItem[] = [
   { url: 'https://www.youtube.com/watch?v=I8SCw7fqV3g' },
   { url: 'https://youtu.be/LIaMEqJyKXc' },
   { url: 'https://www.youtube.com/watch?v=nGUovY3oJyo' },
+  { url: 'https://youtu.be/KzC7Dy9ygsA' },
 ];
 
 /** Vertical clips / Shorts. Paste YouTube URLs here. */
