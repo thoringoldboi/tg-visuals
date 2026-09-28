@@ -35,11 +35,11 @@ const videoThumb = filmId ? `https://i.ytimg.com/vi/${filmId}/maxresdefault.jpg`
   <section class="section lanes" id="work" aria-label="Explore work">
     <div class="container">
       <div class="lanes__grid">
-        <a class="lane" href="/work/video" data-reveal>
-          <div class="lane__media">
+        <a class="lane" href="/work/video">
+          <div class="lane__media" data-reveal="mask">
             {videoThumb && <img src={videoThumb} alt="" class="lane__img" loading="lazy" />}
           </div>
-          <div class="lane__body">
+          <div class="lane__body" data-reveal style="--reveal-delay:.12s">
             <span class="lane__text">
               <span class="lane__title">Video</span>
               <span class="lane__meta">Film · Commercial · Social</span>
@@ -48,11 +48,11 @@ const videoThumb = filmId ? `https://i.ytimg.com/vi/${filmId}/maxresdefault.jpg`
           </div>
         </a>
 
-        <a class="lane" href="/work/photography" data-reveal style="--reveal-delay:.06s">
-          <div class="lane__media">
+        <a class="lane" href="/work/photography">
+          <div class="lane__media" data-reveal="mask" style="--reveal-delay:.1s">
             <Image src={photoLane} alt="" widths={[600, 900, 1300]} sizes="(max-width: 760px) 100vw, 50vw" class="lane__img" loading="lazy" />
           </div>
-          <div class="lane__body">
+          <div class="lane__body" data-reveal style="--reveal-delay:.22s">
             <span class="lane__text">
               <span class="lane__title">Photography</span>
               <span class="lane__meta">Studio · Portraits · Automotive</span>
@@ -137,6 +137,11 @@ const videoThumb = filmId ? `https://i.ytimg.com/vi/${filmId}/maxresdefault.jpg`
     display: flex;
     align-items: center;
     gap: clamp(0.55rem, 1.1vw, 0.85rem);
+    animation: lockupIn 1.3s var(--ease-out) 0.2s both;
+  }
+  @keyframes lockupIn {
+    from { opacity: 0; transform: translateY(18px); letter-spacing: 0.05em; }
+    to { opacity: 1; transform: none; }
   }
   .hero__logo {
     width: auto;

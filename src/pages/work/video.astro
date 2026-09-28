@@ -27,8 +27,8 @@ const hasVideos = filmVids.length + socialVids.length > 0;
           <div class="wgroup__head"><h2 class="wgroup__title">Recent work</h2></div>
           <div class="film-grid">
             {filmVids.map((v) => (
-              <button class:list={['film', { 'film--v': v.vertical }]} type="button" data-video={v.id} data-vertical={v.vertical ? 'true' : 'false'} data-reveal aria-label={`Play ${v.title}`}>
-                <div class="film__media">
+              <button class:list={['film', { 'film--v': v.vertical }]} type="button" data-video={v.id} data-vertical={v.vertical ? 'true' : 'false'} aria-label={`Play ${v.title}`}>
+                <div class="film__media" data-reveal="mask">
                   {v.thumb ? <img src={v.thumb} alt={v.title} class="vimg" loading="lazy" onerror="this.onerror=null;this.src=this.src.replace('maxresdefault','hqdefault')" /> : <span class="film__ph" aria-hidden="true" />}
                   <span class="film__play" aria-hidden="true">
                     <svg viewBox="0 0 24 24" width="22" height="22"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
@@ -48,12 +48,12 @@ const hasVideos = filmVids.length + socialVids.length > 0;
         <section class="wgroup">
           <div class="wgroup__head">
             <h2 class="wgroup__title">Social content</h2>
-            <span class="wgroup__note">{site.views} views across social platforms</span>
+            <span class="wgroup__note"><span class="countup" data-count="2">0</span>M+ views across social platforms</span>
           </div>
           <div class="social-grid">
             {socialVids.map((v) => (
-              <button class="clip" type="button" data-video={v.id} data-vertical="true" data-reveal aria-label={`Play ${v.title}`}>
-                <div class="clip__media">
+              <button class="clip" type="button" data-video={v.id} data-vertical="true" aria-label={`Play ${v.title}`}>
+                <div class="clip__media" data-reveal="mask">
                   {v.thumb ? <img src={v.thumb} alt={v.title} class="vimg" loading="lazy" onerror="this.onerror=null;this.src=this.src.replace('maxresdefault','hqdefault')" /> : <span class="film__ph" aria-hidden="true" />}
                   <span class="film__play" aria-hidden="true">
                     <svg viewBox="0 0 24 24" width="20" height="20"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
@@ -231,4 +231,38 @@ const hasVideos = filmVids.length + socialVids.length > 0;
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape' && box && !box.hidden) close();
   });
+
+  // Count-up for the "2M+" views figure when it scrolls into view.
+  const countEl = document.querySelector<HTMLElement>('.countup');
+  if (countEl) {
+    const target = parseInt(countEl.dataset.count || '0', 10);
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduce || !('IntersectionObserver' in window)) {
+      countEl.textContent = String(target);
+    } else {
+      const run = () => {
+        const dur = 1100;
+        const start = performance.now();
+        const tick = (now: number) => {
+          const p = Math.min((now - start) / dur, 1);
+          const eased = 1 - Math.pow(1 - p, 3);
+          countEl.textContent = String(Math.round(eased * target));
+          if (p < 1) requestAnimationFrame(tick);
+        };
+        requestAnimationFrame(tick);
+      };
+      const io = new IntersectionObserver(
+        (entries, obs) => {
+          entries.forEach((en) => {
+            if (en.isIntersecting) {
+              run();
+              obs.disconnect();
+            }
+          });
+        },
+        { threshold: 0.6 }
+      );
+      io.observe(countEl);
+    }
+  }
 </script>

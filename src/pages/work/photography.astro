@@ -15,11 +15,11 @@ import { photoAlbums } from '../../data/work';
       <div class="albums">
         {
           photoAlbums.map((a, i) => (
-            <a href={`/work/photography/${a.slug}`} class="album" data-reveal style={`--reveal-delay:${0.08 + i * 0.05}s`}>
-              <div class="album__media">
+            <a href={`/work/photography/${a.slug}`} class="album">
+              <div class="album__media" data-reveal="mask" style={`--reveal-delay:${0.06 + i * 0.05}s`}>
                 <Image src={a.cover} alt={a.title} widths={[500, 800]} sizes="(max-width:640px) 100vw, 50vw" class="album__img" loading="lazy" />
               </div>
-              <div class="album__row">
+              <div class="album__row" data-reveal style={`--reveal-delay:${0.14 + i * 0.05}s`}>
                 <span class="album__title">{a.title}</span>
                 <span class="album__count">{a.images.length}</span>
               </div>
