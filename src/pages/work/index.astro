@@ -1,14 +1,13 @@
 ---
+import { Image } from 'astro:assets';
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import { films, socialVideos } from '../../data/work';
+import { films, socialVideos, photoAlbums, youTubeId } from '../../data/work';
 
-// Video unlocks automatically once you paste a Vimeo link into work.ts.
+// Video unlocks automatically once a YouTube link is added in work.ts.
 const videoReady = films.length + socialVideos.length > 0;
-
-const folders = [
-  { href: '/work/video', title: 'Video', meta: 'Film · Commercial · Social', soon: !videoReady },
-  { href: '/work/photography', title: 'Photography', meta: 'Studio · Portraits · Automotive' },
-];
+const filmId = films[0] ? youTubeId(films[0].url) : '';
+const videoThumb = filmId ? `https://i.ytimg.com/vi/${filmId}/maxresdefault.jpg` : '';
+const photoCover = photoAlbums.find((a) => a.slug === 'automotive')?.cover ?? photoAlbums[0]?.cover;
 ---
 
 <BaseLayout title="Work" description="Selected work by TG Visuals — video and photography.">
@@ -18,30 +17,45 @@ const folders = [
       <h1 class="work-landing__title" data-reveal style="--reveal-delay:.05s">Selected work</h1>
 
       <div class="folders">
-        {
-          folders.map((f, i) => {
-            const Tag = f.soon ? 'div' : 'a';
-            return (
-              <Tag
-                {...(f.soon ? { 'aria-disabled': 'true' } : { href: f.href })}
-                class:list={['folder', { 'folder--soon': f.soon }]}
-                data-reveal
-                style={`--reveal-delay:${0.08 + i * 0.06}s`}
-              >
-                {f.soon ? (
-                  <span class="folder__badge">
-                    <span class="folder__badge-icon" aria-hidden="true">🚧</span>
-                    Coming soon
-                  </span>
-                ) : (
-                  <span class="folder__arrow" aria-hidden="true">↗</span>
-                )}
-                <span class="folder__title">{f.title}</span>
-                <span class="folder__meta">{f.meta}</span>
-              </Tag>
-            );
-          })
-        }
+        {videoReady ? (
+          <a href="/work/video" class="folder">
+            <div class="folder__media">
+              {videoThumb && <img src={videoThumb} alt="" class="folder__img" loading="lazy" />}
+            </div>
+            <div class="folder__body">
+              <span class="folder__text">
+                <span class="folder__title">Video</span>
+                <span class="folder__meta">Film · Commercial · Social</span>
+              </span>
+              <span class="folder__arrow" aria-hidden="true">↗</span>
+            </div>
+          </a>
+        ) : (
+          <div class="folder folder--soon" aria-disabled="true">
+            <div class="folder__media folder__media--empty">
+              <span class="folder__badge"><span aria-hidden="true">🚧</span> Coming soon</span>
+            </div>
+            <div class="folder__body">
+              <span class="folder__text">
+                <span class="folder__title">Video</span>
+                <span class="folder__meta">Film · Commercial · Social</span>
+              </span>
+            </div>
+          </div>
+        )}
+
+        <a href="/work/photography" class="folder">
+          <div class="folder__media">
+            <Image src={photoCover} alt="" widths={[600, 900, 1300]} sizes="(max-width: 760px) 100vw, 50vw" class="folder__img" loading="lazy" />
+          </div>
+          <div class="folder__body">
+            <span class="folder__text">
+              <span class="folder__title">Photography</span>
+              <span class="folder__meta">Studio · Portraits · Automotive</span>
+            </span>
+            <span class="folder__arrow" aria-hidden="true">↗</span>
+          </div>
+        </a>
       </div>
     </div>
   </section>
@@ -60,75 +74,71 @@ const folders = [
   }
   .folders {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: 1fr 1fr;
     gap: var(--space-m);
   }
-  .folder {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-    aspect-ratio: 16 / 10;
-    padding: var(--space-m);
-    border: 1px solid var(--line);
-    background: var(--paper);
+  .folder { display: block; color: inherit; }
+  .folder__media {
+    aspect-ratio: 3 / 2;
     overflow: hidden;
-    transition: background var(--dur) var(--ease), color var(--dur) var(--ease);
+    background: var(--charcoal);
   }
-  .folder:hover { background: var(--ink); color: var(--paper); }
-
-  /* Coming-soon folder: not a link, muted, no hover invert */
-  .folder--soon {
-    cursor: not-allowed;
-    border-style: dashed;
-    color: var(--smoke-dim);
+  .folder__img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 1.1s var(--ease);
   }
-  .folder--soon .folder__title { color: var(--smoke); }
-  .folder--soon:hover { background: var(--paper); color: var(--smoke-dim); }
-  .folder__badge {
-    position: absolute;
-    top: var(--space-m);
-    right: var(--space-m);
-    display: inline-flex;
-    align-items: center;
-    gap: 0.45em;
-    padding: 0.4em 0.7em;
-    border: 1px solid var(--line);
-    border-radius: 999px;
-    font-family: var(--font-display);
-    font-size: var(--step--1);
-    font-weight: 600;
-    letter-spacing: 0.02em;
-    color: var(--smoke);
-    background: var(--paper-2);
-    white-space: nowrap;
+  .folder:hover .folder__img { transform: scale(1.045); }
+  .folder__body {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--space-s);
+    margin-top: 1em;
+    padding-bottom: 1em;
+    border-bottom: 1px solid var(--line-soft);
   }
-  .folder__badge-icon { font-size: 1.05em; }
+  .folder__text { display: flex; flex-direction: column; gap: 0.2em; }
   .folder__title {
     font-family: var(--font-display);
-    font-size: var(--step-3);
     font-weight: 500;
+    font-size: var(--step-2);
     letter-spacing: -0.02em;
     line-height: 1;
   }
+  .folder__meta { font-size: var(--step--1); color: var(--smoke-dim); }
   .folder__arrow {
-    position: absolute;
-    top: var(--space-m);
-    right: var(--space-m);
     color: var(--smoke-dim);
+    font-size: var(--step-1);
     transition: transform var(--dur) var(--ease), color var(--dur) var(--ease);
   }
-  .folder:hover .folder__arrow { transform: translate(4px, -4px); color: var(--paper); }
-  .folder__meta {
-    display: block;
-    margin-top: 0.5em;
-    font-size: var(--step--1);
-    color: var(--smoke-dim);
-    transition: color var(--dur) var(--ease);
+  .folder:hover .folder__arrow { transform: translate(4px, -4px); color: var(--ink); }
+
+  /* Coming-soon fallback (only if no videos are added yet) */
+  .folder--soon { cursor: not-allowed; }
+  .folder__media--empty {
+    display: grid;
+    place-items: center;
+    background: var(--paper-2);
+    border: 1px dashed var(--line);
   }
-  .folder:hover .folder__meta { color: rgba(255, 255, 255, 0.7); }
+  .folder__badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45em;
+    padding: 0.4em 0.9em;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: var(--paper);
+    font-family: var(--font-display);
+    font-size: var(--step--1);
+    font-weight: 600;
+    color: var(--smoke);
+    white-space: nowrap;
+  }
+
   @media (max-width: 760px) {
     .folders { grid-template-columns: 1fr; }
-    .folder { aspect-ratio: 3 / 2; }
   }
 </style>
