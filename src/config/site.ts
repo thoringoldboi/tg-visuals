@@ -39,8 +39,8 @@ export const contact = {
     url: '',
   },
   youtube: {
-    label: '',
-    url: '',
+    label: '@thoringoldswain',
+    url: 'https://www.youtube.com/@thoringoldswain',
   },
 } as const;
 
