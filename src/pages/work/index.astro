@@ -90,6 +90,10 @@ const photoCover = photoAlbums.find((a) => a.slug === 'automotive')?.cover ?? ph
     transition: transform 1.1s var(--ease);
   }
   .folder:hover .folder__img { transform: scale(1.045); }
+  /* Video thumbnail starts slightly zoomed to hide the thin black letterbox
+     baked into some YouTube thumbnails. */
+  .folder[href="/work/video"] .folder__img { transform: scale(1.03); }
+  .folder[href="/work/video"]:hover .folder__img { transform: scale(1.08); }
   .folder__body {
     display: flex;
     align-items: baseline;

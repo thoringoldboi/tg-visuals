@@ -176,6 +176,10 @@ const videoThumb = filmId ? `https://i.ytimg.com/vi/${filmId}/maxresdefault.jpg`
     transition: transform 1.1s var(--ease);
   }
   .lane:hover .lane__img { transform: scale(1.045); }
+  /* Video thumbnail starts slightly zoomed to hide the thin black letterbox
+     baked into some YouTube thumbnails. */
+  .lane[href="/work/video"] .lane__img { transform: scale(1.03); }
+  .lane[href="/work/video"]:hover .lane__img { transform: scale(1.08); }
   .lane__body {
     display: flex;
     align-items: baseline;
