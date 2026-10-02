@@ -263,10 +263,22 @@ export interface Service {
 }
 
 export const services: Service[] = [
-  { title: 'Video Production', desc: 'High-end commercial, brand, campaign and social video — directed, shot and cut end to end.' },
-  { title: 'Social Media Content', desc: 'Short-form vertical content built for Instagram and TikTok — hooks, pacing and retention baked in.' },
-  { title: 'Photography', desc: 'Premium automotive, product, studio and fashion photography with a cinematic grade.' },
-  { title: 'Creative Direction', desc: 'Concept development, visual planning, shot design and creative execution.' },
+  {
+    title: 'Commercial & Brand Film',
+    desc: 'Cinematic, high-end video for brands — product films, campaigns and brand stories made to feel premium and command attention. This is where my focus lies.',
+  },
+  {
+    title: 'Social Content',
+    desc: 'Short-form vertical video for Instagram and TikTok — reels and edits built around strong hooks, pacing and retention. 2M+ views generated across platforms.',
+  },
+  {
+    title: 'Social Media Management',
+    desc: 'Ongoing content and channel management — reels, carousels and a consistent, on-brand presence, handled end to end so you can stay behind the scenes.',
+  },
+  {
+    title: 'Photography',
+    desc: 'Automotive, studio and portrait photography with a cinematic grade — stills that carry the same tone and intention as the films.',
+  },
 ];
 
 // ---------------------------------------------------------------------------
