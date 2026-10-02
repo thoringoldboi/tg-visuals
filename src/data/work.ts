@@ -113,7 +113,7 @@ export const socialVideos: VideoItem[] = [
   { url: 'https://www.youtube.com/shorts/rbZB-QrkP6Q' },
   { url: 'https://youtube.com/shorts/JQkN7AVC2QI' },
   { url: 'https://youtube.com/shorts/4bGm2BYlBjs' },
-  { url: 'https://youtube.com/shorts/fhtNdkecoG8', title: 'SGI Helmets — Brand Reel 2' },
+  { url: 'https://youtube.com/shorts/fhtNdkecoG8', title: 'SGI Helmets - Brand Reel 2' },
 ];
 
 export interface ResolvedVideo {
@@ -265,19 +265,19 @@ export interface Service {
 export const services: Service[] = [
   {
     title: 'Commercial & Brand Film',
-    desc: 'Cinematic, high-end video for brands — product films, campaigns and brand stories made to feel premium and command attention. This is where my focus lies.',
+    desc: 'Cinematic, high-end video for brands. Product films, campaigns and brand stories made to feel premium and hold attention. This is where my focus lies.',
   },
   {
     title: 'Social Content',
-    desc: 'Short-form vertical video for Instagram and TikTok — reels and edits built around strong hooks, pacing and retention. 2M+ views generated across platforms.',
+    desc: 'Short-form vertical video for Instagram and TikTok. Reels and edits built around strong hooks, pacing and retention. 2M+ views generated across platforms.',
   },
   {
     title: 'Social Media Management',
-    desc: 'Ongoing content and channel management — reels, carousels and a consistent, on-brand presence, handled end to end so you can stay behind the scenes.',
+    desc: 'Ongoing content and channel management. Reels, carousels and a consistent, on-brand presence, handled end to end so you can stay behind the scenes.',
   },
   {
     title: 'Photography',
-    desc: 'Automotive, studio and portrait photography with a cinematic grade — stills that carry the same tone and intention as the films.',
+    desc: 'Automotive, studio and portrait photography with a cinematic grade. Stills that carry the same tone and intention as the films.',
   },
 ];
 
