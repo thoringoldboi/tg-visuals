@@ -1,0 +1,60 @@
+---
+import { results } from '../config/site';
+
+interface Props {
+  /** Dark band (home) or light, hairline-ruled (inner pages). */
+  tone?: 'dark' | 'light';
+  class?: string;
+}
+const { tone = 'light', class: cls } = Astro.props;
+---
+
+<div class:list={['results', `results--${tone}`, cls]}>
+  <ul class="results__list">
+    {results.map((r, i) => (
+      <li class="results__item" data-reveal style={`--reveal-delay:${0.06 + i * 0.08}s`}>
+        <span class="results__value">{r.value}</span>
+        <span class="results__label">{r.label}</span>
+      </li>
+    ))}
+  </ul>
+</div>
+
+<style>
+  .results__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-m);
+  }
+  .results__item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.55em;
+    padding-top: var(--space-s);
+    border-top: 1px solid var(--line);
+  }
+  .results__value {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: var(--step-3);
+    letter-spacing: -0.035em;
+    line-height: 1;
+    white-space: nowrap;
+  }
+  .results__label {
+    font-size: var(--step--1);
+    color: var(--smoke);
+    line-height: 1.45;
+    max-width: 26ch;
+  }
+  .results--dark .results__item { border-top-color: rgba(255, 255, 255, 0.18); }
+  .results--dark .results__value { color: var(--white); }
+  .results--dark .results__label { color: var(--on-dark-dim); }
+  @media (max-width: 760px) {
+    .results__list { grid-template-columns: 1fr; gap: var(--space-s); }
+    .results__value { font-size: var(--step-2); }
+  }
+</style>

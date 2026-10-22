@@ -4,6 +4,10 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import { photoAlbums, films, youTubeId } from '../data/work';
 import heroPoster from '../assets/work/hero-poster.jpg';
 import markWhite from '../assets/brand/tg-mark-white.png';
+import Results from '../components/Results.astro';
+import { site } from '../config/site';
+
+const offer = ['Film & Commercial', 'Short-form & Social', 'Social Growth & Paid Ads', 'Photography'];
 
 // Two lanes under the hero: Video + Photography, each backed by real work.
 const photoLane = photoAlbums.find((a) => a.slug === 'automotive')?.cover ?? photoAlbums[0]?.cover;
@@ -28,6 +32,25 @@ const videoThumb = filmId ? `https://i.ytimg.com/vi/${filmId}/maxresdefault.jpg`
         <Image src={markWhite} alt="TG Visuals" width={506} densities={[1, 2]} class="hero__logo" />
         <span class="hero__word">VISUALS</span>
       </div>
+    </div>
+  </section>
+
+  <!-- ============================ INTRO ============================ -->
+  <section class="intro" aria-label="About">
+    <div class="container">
+      <h2 class="intro__lead" data-reveal>{site.positioning}</h2>
+      <div class="intro__grid">
+        <p class="intro__text" data-reveal style="--reveal-delay:.08s">
+          I’m Thorin, a filmmaker in Cape Town. I shoot, edit and colour grade, and a lot of
+          what I make is built for social, so I think about the first two seconds as carefully
+          as the final grade. I’ve also run a brand’s organic channels and Meta ad campaigns,
+          so the content is made to perform, not just to look good.
+        </p>
+        <ul class="intro__offer" data-reveal style="--reveal-delay:.14s">
+          {offer.map((o) => <li><a href="/services">{o}</a></li>)}
+        </ul>
+      </div>
+      <Results class="intro__results" />
     </div>
   </section>
 
@@ -156,6 +179,50 @@ const videoThumb = filmId ? `https://i.ytimg.com/vi/${filmId}/maxresdefault.jpg`
     text-transform: uppercase;
     color: #fff;
   }
+  /* ---------------- Intro (positioning + results) ---------------- */
+  .intro { padding-block: var(--space-2xl) 0; }
+  .intro__lead {
+    font-size: var(--step-4);
+    letter-spacing: -0.04em;
+    line-height: 0.98;
+    max-width: 14ch;
+  }
+  .intro__grid {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: var(--space-l);
+    align-items: start;
+    margin-top: var(--space-l);
+  }
+  .intro__text {
+    color: var(--smoke);
+    font-size: var(--step-0);
+    line-height: 1.65;
+    max-width: 56ch;
+  }
+  .intro__offer {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border-top: 1px solid var(--line);
+  }
+  .intro__offer a {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.8em 0;
+    border-bottom: 1px solid var(--line);
+    font-family: var(--font-display);
+    font-weight: 500;
+    color: var(--ink);
+    transition: padding var(--dur) var(--ease);
+  }
+  .intro__offer a::after { content: '↗'; color: var(--smoke-dim); }
+  .intro__offer a:hover { padding-left: 0.4em; }
+  .intro :global(.intro__results) { margin-top: var(--space-xl); }
+  @media (max-width: 760px) {
+    .intro__grid { grid-template-columns: 1fr; gap: var(--space-m); }
+  }
+
   /* ---------------- Lanes (Video / Photography) ---------------- */
   .lanes { padding-block: var(--space-2xl) var(--space-m); }
   .lanes__grid {

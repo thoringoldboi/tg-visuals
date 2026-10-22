@@ -8,6 +8,7 @@ const year = new Date().getFullYear();
   <div class="container site-footer__inner">
     <p class="eyebrow site-footer__eyebrow">Get in touch</p>
     <a href={`mailto:${contact.email}`} class="site-footer__email">{contact.email}</a>
+    <a href={contact.phoneHref} class="site-footer__phone">{contact.phone}</a>
 
     <div class="site-footer__links">
       {
@@ -49,15 +50,26 @@ const year = new Date().getFullYear();
     font-size: clamp(1.05rem, 5.4vw, 4rem);
     letter-spacing: -0.03em;
     color: var(--white);
-    margin: 0.5em 0 0.9em;
+    margin: 0.5em 0 0.3em;
     max-width: 100%;
     overflow-wrap: anywhere;
     transition: opacity var(--dur) var(--ease);
   }
   .site-footer__email:hover { opacity: 0.7; }
+  .site-footer__phone {
+    font-family: var(--font-display);
+    font-size: var(--step-1);
+    letter-spacing: -0.01em;
+    color: var(--on-dark-dim);
+    margin-bottom: var(--space-m);
+    transition: color var(--dur) var(--ease);
+  }
+  .site-footer__phone:hover { color: var(--white); }
   .site-footer__links {
     display: flex;
-    gap: var(--space-m);
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--space-xs) var(--space-m);
     color: var(--on-dark-dim);
   }
   .site-footer__links a:hover { color: var(--white); }

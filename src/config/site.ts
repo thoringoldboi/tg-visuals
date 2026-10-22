@@ -16,10 +16,23 @@ export const site = {
   locale: 'en_ZA',
   /** Headline credibility figure. */
   views: '2M+',
+  /** One-line positioning used on the home page. */
+  positioning: 'Film, social content and the strategy behind it.',
+  location: 'Cape Town, South Africa',
 } as const;
+
+/** Headline results (real figures from SHOOT. Studios + social). */
+export const results: { value: string; label: string }[] = [
+  { value: '2M+', label: 'Views across social platforms' },
+  { value: '500 → 5K', label: 'Instagram followers grown for SHOOT. Studios' },
+  { value: '0 → 2K', label: 'TikTok followers grown organically' },
+];
 
 export const contact = {
   email: 'thoringoldswain@gmail.com',
+  /** Display format and tel: link. */
+  phone: '+27 66 058 6919',
+  phoneHref: 'tel:+27660586919',
   /** Digits only, international format, no “+”. Used for the WhatsApp link. */
   whatsapp: '',
   /**
@@ -42,11 +55,16 @@ export const contact = {
     label: '@thoringoldswain',
     url: 'https://www.youtube.com/@thoringoldswain',
   },
+  linkedin: {
+    label: 'thorin-goldswain',
+    url: 'https://www.linkedin.com/in/thorin-goldswain',
+  },
 } as const;
 
-/** Primary navigation. Work → home section; Bio & Contact are their own pages. */
+/** Primary navigation. */
 export const nav: { label: string; href: string }[] = [
   { label: 'Work', href: '/work' },
+  { label: 'Services', href: '/services' },
   { label: 'Bio', href: '/bio' },
   { label: 'Contact', href: '/contact' },
 ];
@@ -58,5 +76,6 @@ export const socialLinks = [
   { label: 'Instagram', url: contact.instagram.url },
   { label: 'TikTok', url: contact.tiktok.url },
   { label: 'YouTube', url: contact.youtube.url },
+  { label: 'LinkedIn', url: contact.linkedin.url },
   { label: 'Email', url: `mailto:${contact.email}` },
 ].filter((l) => l.url);

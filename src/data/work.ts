@@ -95,26 +95,30 @@ export interface VideoItem {
   category?: string;
   /** Force a vertical (9:16) layout for a non-Shorts URL. */
   vertical?: boolean;
+  /** Optional one-line brief shown under the title. */
+  desc?: string;
+  /** Optional role, e.g. 'Filmed, edited & graded'. */
+  role?: string;
 }
 
 /** Landscape films & commercials. Paste YouTube URLs here. */
 export const films: VideoItem[] = [
-  { url: 'https://youtu.be/KzC7Dy9ygsA' },
-  { url: 'https://www.youtube.com/watch?v=w1L-YY0YNJA' },
+  { url: 'https://youtu.be/KzC7Dy9ygsA', role: 'Filmed, edited & graded', desc: 'A running film through the streets of Cape Town. Low angles, motion blur and a mix of colour and black-and-white to carry the feeling of speed.' },
+  { url: 'https://www.youtube.com/watch?v=w1L-YY0YNJA', role: 'Filmed, edited & graded', desc: 'Shot during a group session at a Hyrox gym. Close, handheld and fast, built around effort and reactions.' },
   { url: 'https://www.youtube.com/watch?v=KsMY9ueM4B0' },
-  { url: 'https://www.youtube.com/watch?v=I8SCw7fqV3g' },
-  { url: 'https://youtu.be/LIaMEqJyKXc' },
+  { url: 'https://www.youtube.com/watch?v=I8SCw7fqV3g', role: 'Filmed, edited & graded', desc: 'Event film from the Gas Motor Show in Cape Town, with the cars as the focus.' },
+  { url: 'https://youtu.be/LIaMEqJyKXc', role: 'Filmed, edited & graded', desc: 'A rider and his Suzuki GSX-R1000 at golden hour on the roads below Lion’s Head.' },
   { url: 'https://www.youtube.com/watch?v=nGUovY3oJyo' },
 ];
 
 /** Vertical clips / Shorts. Paste YouTube URLs here. */
 export const socialVideos: VideoItem[] = [
-  { url: 'https://youtube.com/shorts/qmxlGgqgvWk' },
+  { url: 'https://youtube.com/shorts/qmxlGgqgvWk', role: 'Concept, shooting & editing' },
   { url: 'https://www.youtube.com/shorts/rbZB-QrkP6Q' },
   { url: 'https://youtube.com/shorts/JQkN7AVC2QI' },
   { url: 'https://youtube.com/shorts/4bGm2BYlBjs' },
-  { url: 'https://youtube.com/shorts/fhtNdkecoG8', title: 'SGI Helmets - Brand Reel 2' },
-  { url: 'https://www.youtube.com/shorts/Okr8_ePeAxE' },
+  { url: 'https://youtube.com/shorts/fhtNdkecoG8', title: 'SGI Helmets - Brand Reel 2', role: 'Concept, shooting & editing' },
+  { url: 'https://www.youtube.com/shorts/Okr8_ePeAxE', role: 'Concept, shooting & editing' },
 ];
 
 export interface ResolvedVideo {
@@ -124,6 +128,8 @@ export interface ResolvedVideo {
   category: string;
   thumb: string;
   vertical: boolean;
+  desc: string;
+  role: string;
 }
 
 /** Extract the 11-char YouTube video id from any common URL form. */
@@ -161,6 +167,8 @@ export async function resolveVideos(items: VideoItem[]): Promise<ResolvedVideo[]
         category: it.category ?? '',
         thumb: id ? `https://i.ytimg.com/vi/${id}/maxresdefault.jpg` : '',
         vertical,
+        desc: it.desc ?? '',
+        role: it.role ?? '',
       };
     })
   );
@@ -256,29 +264,34 @@ export const photoAlbums: PhotoAlbum[] = Object.keys(grouped)
   });
 
 // ---------------------------------------------------------------------------
-// Services (used elsewhere / future).
+// Services. Drives /services.
 // ---------------------------------------------------------------------------
 export interface Service {
   title: string;
   desc: string;
+  includes: string[];
 }
 
 export const services: Service[] = [
   {
-    title: 'Commercial & Brand Film',
-    desc: 'Cinematic, high-end video for brands. Product films, campaigns and brand stories made to feel premium and hold attention. This is where my focus lies.',
+    title: 'Film & Commercial',
+    desc: 'Cinematic brand films, product pieces and event films. I shoot, edit and colour grade everything myself, so the look stays consistent from the first idea to the final export.',
+    includes: ['Concept & creative direction', 'Filming & cinematography', 'Editing & colour grading', 'Sound design & music'],
   },
   {
-    title: 'Social Content',
-    desc: 'Short-form vertical video for Instagram and TikTok. Reels and edits built around strong hooks, pacing and retention. 2M+ views generated across platforms.',
+    title: 'Short-form & Social Content',
+    desc: 'Reels and shorts made for how people actually watch on their phones. I think about the first two seconds as carefully as the final grade: a strong hook, pacing that holds attention and sound that carries the cut.',
+    includes: ['Concept to final cut', 'Edits from your supplied footage', 'Hooks, pacing & retention', 'Instagram, TikTok & YouTube Shorts'],
   },
   {
-    title: 'Social Media Management',
-    desc: 'Ongoing content and channel management. Reels, carousels and a consistent, on-brand presence, handled end to end so you can stay behind the scenes.',
+    title: 'Social Growth & Paid Ads',
+    desc: 'Content is only half of it. I’ve run a brand’s organic channels and its Meta ad campaigns side by side, so one shoot can feed both your feed and your ads. At SHOOT. Studios that took Instagram from under 500 to around 5,000 followers.',
+    includes: ['Content concepts & planning', 'Organic social growth', 'Meta Ads creative & campaigns', 'One shoot for feed and ads'],
   },
   {
     title: 'Photography',
-    desc: 'Automotive, studio and portrait photography with a cinematic grade. Stills that carry the same tone and intention as the films.',
+    desc: 'Studio, portrait, product and automotive photography with the same cinematic grade as the films, so stills and video sit together as one campaign.',
+    includes: ['Studio & portrait', 'Product', 'Automotive', 'Events'],
   },
 ];
 
