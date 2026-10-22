@@ -114,6 +114,7 @@ export const socialVideos: VideoItem[] = [
   { url: 'https://youtube.com/shorts/JQkN7AVC2QI' },
   { url: 'https://youtube.com/shorts/4bGm2BYlBjs' },
   { url: 'https://youtube.com/shorts/fhtNdkecoG8', title: 'SGI Helmets - Brand Reel 2' },
+  { url: 'https://www.youtube.com/shorts/Okr8_ePeAxE' },
 ];
 
 export interface ResolvedVideo {
