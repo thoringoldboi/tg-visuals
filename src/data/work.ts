@@ -187,9 +187,7 @@ export interface PhotoAlbum {
 }
 
 /** Per-album banner crop focal point (object-position). Default centres it. */
-const heroFocus: Record<string, string> = {
-  portraits: '50% 40%', // centre the subject's face in the banner crop
-};
+const heroFocus: Record<string, string> = {};
 
 const albumFiles = import.meta.glob<{ default: ImageMetadata }>(
   '../assets/work/photography/*/*.{jpg,jpeg,png,webp,JPG,JPEG,PNG,WEBP}',
@@ -197,7 +195,7 @@ const albumFiles = import.meta.glob<{ default: ImageMetadata }>(
 );
 
 /** Preferred display order. Folders not listed appear after, alphabetically. */
-const albumOrder = ['studio', 'portraits', 'automotive'];
+const albumOrder = ['studio', 'automotive'];
 
 const titleize = (slug: string) =>
   slug.replace(/[-_]/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase());
