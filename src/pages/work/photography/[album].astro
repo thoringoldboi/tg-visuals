@@ -236,17 +236,26 @@ const larges = await Promise.all(
         cols.push(c);
         heights.push(0);
       }
-      // Place each image in the currently-shortest column (balances heights,
-      // so columns end together — no big white gaps).
-      items.forEach((it) => {
+      // Relative (unitless) height of a photo: its height as a fraction of its
+      // width, plus a small allowance for the gap beneath it.
+      const ratio = (it: HTMLElement) => {
         const img = it.querySelector('img');
         const w = Number(img?.getAttribute('width')) || img?.naturalWidth || 1;
         const h = Number(img?.getAttribute('height')) || img?.naturalHeight || 1;
-        let min = 0;
-        for (let k = 1; k < n; k++) if (heights[k] < heights[min]) min = k;
-        cols[min].appendChild(it);
-        heights[min] += h / w + 0.06; // relative height + gap allowance
-      });
+        return h / w + 0.06;
+      };
+      // Place each image in the currently-shortest column, tallest images first.
+      // Going tallest-first lets the shorter images act as fillers at the bottom,
+      // so the columns end at nearly the same height — no single tall image left
+      // stranded well below the rest (a ragged, lonely bottom).
+      [...items]
+        .sort((a, b) => ratio(b) - ratio(a))
+        .forEach((it) => {
+          let min = 0;
+          for (let k = 1; k < n; k++) if (heights[k] < heights[min]) min = k;
+          cols[min].appendChild(it);
+          heights[min] += ratio(it);
+        });
     };
     build();
     let rt: number | undefined;

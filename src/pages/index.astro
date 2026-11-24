@@ -29,6 +29,15 @@ const videoThumb = filmId ? `https://i.ytimg.com/vi/${filmId}/maxresdefault.jpg`
         <span class="hero__word">VISUALS</span>
       </div>
     </div>
+
+    <a href="#work" class="hero__cta" aria-label="View work">
+      <span class="hero__cta-circle" aria-hidden="true">
+        <svg viewBox="0 0 24 24" width="19" height="19">
+          <path d="M12 5v13M6 12.5l6 6 6-6" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+      </span>
+      <span class="hero__cta-label">View Work</span>
+    </a>
   </section>
 
   <!-- ============================ LANES ============================ -->
@@ -156,6 +165,51 @@ const videoThumb = filmId ? `https://i.ytimg.com/vi/${filmId}/maxresdefault.jpg`
     text-transform: uppercase;
     color: #fff;
   }
+
+  /* ---------------- "View Work" scroll cue ---------------- */
+  .hero__cta {
+    position: absolute;
+    left: 50%;
+    bottom: clamp(1.6rem, 4vh, 3rem);
+    transform: translateX(-50%);
+    z-index: 3;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.9em;
+    color: #fff;
+    white-space: nowrap;
+  }
+  .hero__cta-circle {
+    flex: none;
+    width: clamp(46px, 4vw, 56px);
+    height: clamp(46px, 4vw, 56px);
+    display: grid;
+    place-items: center;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    border-radius: 50%;
+    transition: background var(--dur) var(--ease), border-color var(--dur) var(--ease);
+  }
+  .hero__cta-circle svg {
+    animation: ctaBob 2.2s var(--ease) infinite;
+  }
+  .hero__cta:hover .hero__cta-circle {
+    background: rgba(255, 255, 255, 0.14);
+    border-color: #fff;
+  }
+  .hero__cta-label {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: clamp(1.05rem, 0.9rem + 0.7vw, 1.5rem);
+    letter-spacing: 0.01em;
+  }
+  @keyframes ctaBob {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(3px); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .hero__cta-circle svg { animation: none; }
+  }
+
   /* ---------------- Lanes (Video / Photography) ---------------- */
   .lanes { padding-block: var(--space-2xl) var(--space-m); }
   .lanes__grid {
