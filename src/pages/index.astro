@@ -148,7 +148,7 @@ const videoThumb = filmId ? `https://i.ytimg.com/vi/${filmId}/maxresdefault.jpg`
     gap: clamp(0.55rem, 1.1vw, 0.85rem);
     /* Text is visible from the first frame (no opacity fade); only the blur
        animates, resolving very slowly from blurred to sharp. */
-    animation: blurIn 3s linear 0s both;
+    animation: blurIn 2.25s linear 0s both;
   }
   @keyframes blurIn {
     from { filter: blur(10px); }
@@ -183,7 +183,7 @@ const videoThumb = filmId ? `https://i.ytimg.com/vi/${filmId}/maxresdefault.jpg`
     /* font-size here so the circle can be sized in em, matching the text height */
     font-size: clamp(0.82rem, 0.74rem + 0.35vw, 1.05rem);
     /* Visible from frame 1, slow blur-to-sharp (reuses blurIn; keeps -50% centering). */
-    animation: blurIn 3s linear 0.3s both;
+    animation: blurIn 2.25s linear 0.3s both;
   }
   .hero__cta-circle {
     flex: none;
