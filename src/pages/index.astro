@@ -204,10 +204,11 @@ const videoThumb = filmId ? `https://i.ytimg.com/vi/${filmId}/maxresdefault.jpg`
     border-color: #fff;
   }
   .hero__cta-label {
+    /* Matches the nav links (.nav__link): Space Grotesk, weight 400, 0.02em. */
     font-family: var(--font-display);
-    font-weight: 500;
+    font-weight: 400;
     font-size: clamp(0.82rem, 0.74rem + 0.35vw, 1.05rem);
-    letter-spacing: 0.01em;
+    letter-spacing: 0.02em;
   }
   @keyframes ctaBob {
     0%, 100% { transform: translateY(0); }
