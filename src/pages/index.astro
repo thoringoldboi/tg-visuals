@@ -146,12 +146,12 @@ const videoThumb = filmId ? `https://i.ytimg.com/vi/${filmId}/maxresdefault.jpg`
     display: flex;
     align-items: center;
     gap: clamp(0.55rem, 1.1vw, 0.85rem);
-    animation: blurIn 1.6s var(--ease-out) 0.25s both;
+    /* Matches reilinjoey.com exactly: 1400ms, ease-in, blur(9px) resolving late. */
+    animation: blurIn 1.4s cubic-bezier(0.47, 0, 0.745, 0.715) 0.2s both;
   }
-  /* Cinematic fade-in: resolves from a soft blur to sharp on load. */
   @keyframes blurIn {
-    from { opacity: 0; filter: blur(16px); transform: translateY(14px); }
-    to { opacity: 1; filter: blur(0); transform: none; }
+    from { opacity: 0; filter: blur(9px); }
+    to { opacity: 1; filter: blur(0); }
   }
   .hero__logo {
     width: auto;
@@ -176,27 +176,31 @@ const videoThumb = filmId ? `https://i.ytimg.com/vi/${filmId}/maxresdefault.jpg`
     z-index: 3;
     display: inline-flex;
     align-items: center;
-    gap: 0.7em;
+    gap: 0.55em;
     color: #fff;
     white-space: nowrap;
-    animation: ctaBlurIn 1.3s var(--ease-out) 0.9s both;
+    /* font-size here so the circle can be sized in em, matching the text height */
+    font-size: clamp(0.82rem, 0.74rem + 0.35vw, 1.05rem);
+    animation: ctaBlurIn 1.4s cubic-bezier(0.47, 0, 0.745, 0.715) 1.4s both;
   }
   /* Same blur-fade as the lockup, staggered in after it (keeps the -50% centering). */
   @keyframes ctaBlurIn {
-    from { opacity: 0; filter: blur(10px); transform: translate(-50%, 10px); }
+    from { opacity: 0; filter: blur(9px); transform: translateX(-50%); }
     to { opacity: 1; filter: blur(0); transform: translateX(-50%); }
   }
   .hero__cta-circle {
     flex: none;
-    width: clamp(36px, 3vw, 44px);
-    height: clamp(36px, 3vw, 44px);
+    width: 1.5em;
+    height: 1.5em;
     display: grid;
     place-items: center;
-    border: 1px solid rgba(255, 255, 255, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.55);
     border-radius: 50%;
     transition: background var(--dur) var(--ease), border-color var(--dur) var(--ease);
   }
   .hero__cta-circle svg {
+    width: 0.8em;
+    height: 0.8em;
     animation: ctaBob 2.2s var(--ease) infinite;
   }
   .hero__cta:hover .hero__cta-circle {
@@ -207,7 +211,7 @@ const videoThumb = filmId ? `https://i.ytimg.com/vi/${filmId}/maxresdefault.jpg`
     /* Matches the nav links (.nav__link): Space Grotesk, weight 400, 0.02em. */
     font-family: var(--font-display);
     font-weight: 400;
-    font-size: clamp(0.82rem, 0.74rem + 0.35vw, 1.05rem);
+    font-size: 1em;
     letter-spacing: 0.02em;
   }
   @keyframes ctaBob {

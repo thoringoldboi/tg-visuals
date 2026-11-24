@@ -100,6 +100,7 @@ export interface VideoItem {
 /** Landscape films & commercials. Paste YouTube URLs here. */
 export const films: VideoItem[] = [
   { url: 'https://youtu.be/k2phc7xSafk' },
+  { url: 'https://youtube.com/shorts/_OguQLmdyxM', vertical: true },
   { url: 'https://youtu.be/KzC7Dy9ygsA' },
   { url: 'https://www.youtube.com/watch?v=w1L-YY0YNJA' },
   { url: 'https://www.youtube.com/watch?v=KsMY9ueM4B0' },
