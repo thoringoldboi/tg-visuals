@@ -146,12 +146,13 @@ const videoThumb = filmId ? `https://i.ytimg.com/vi/${filmId}/maxresdefault.jpg`
     display: flex;
     align-items: center;
     gap: clamp(0.55rem, 1.1vw, 0.85rem);
-    /* Matches reilinjoey.com exactly: 1400ms, ease-in, blur(9px) resolving late. */
-    animation: blurIn 1.4s cubic-bezier(0.47, 0, 0.745, 0.715) 0.2s both;
+    /* Text is visible from the first frame (no opacity fade); only the blur
+       animates, resolving very slowly from blurred to sharp. */
+    animation: blurIn 3s linear 0s both;
   }
   @keyframes blurIn {
-    from { opacity: 0; filter: blur(9px); }
-    to { opacity: 1; filter: blur(0); }
+    from { filter: blur(14px); }
+    to { filter: blur(0); }
   }
   .hero__logo {
     width: auto;
@@ -181,12 +182,8 @@ const videoThumb = filmId ? `https://i.ytimg.com/vi/${filmId}/maxresdefault.jpg`
     white-space: nowrap;
     /* font-size here so the circle can be sized in em, matching the text height */
     font-size: clamp(0.82rem, 0.74rem + 0.35vw, 1.05rem);
-    animation: ctaBlurIn 1.4s cubic-bezier(0.47, 0, 0.745, 0.715) 1.4s both;
-  }
-  /* Same blur-fade as the lockup, staggered in after it (keeps the -50% centering). */
-  @keyframes ctaBlurIn {
-    from { opacity: 0; filter: blur(9px); transform: translateX(-50%); }
-    to { opacity: 1; filter: blur(0); transform: translateX(-50%); }
+    /* Visible from frame 1, slow blur-to-sharp (reuses blurIn; keeps -50% centering). */
+    animation: blurIn 3s linear 0.3s both;
   }
   .hero__cta-circle {
     flex: none;
