@@ -49,15 +49,17 @@ import portrait from '../assets/portrait/thor-portrait.jpg';
   }
   .bio__grid {
     display: grid;
-    grid-template-columns: 1.15fr 0.85fr;
-    gap: var(--space-xl);
+    grid-template-columns: 0.9fr 1.1fr;
+    gap: var(--space-l);
     align-items: center;
   }
   .bio__img {
     width: 100%;
-    height: clamp(440px, 74vh, 840px);
+    max-width: 80%;
+    margin-inline: auto;
+    aspect-ratio: 4 / 5;
     object-fit: cover;
-    object-position: 50% 25%;
+    object-position: 50% 22%;
   }
   .bio__lead {
     font-size: var(--step-3);
@@ -68,13 +70,17 @@ import portrait from '../assets/portrait/thor-portrait.jpg';
   }
   .bio__text {
     color: var(--smoke);
-    max-width: 54ch;
-    line-height: 1.7;
+    max-width: 50ch;
+    font-size: var(--step--1);
+    line-height: 1.75;
   }
   .bio__text + .bio__text { margin-top: 1.2em; }
   .bio__link { display: inline-block; margin-top: 1.8em; color: var(--ink); }
   @media (max-width: 820px) {
-    .bio__grid { grid-template-columns: 1fr; gap: var(--space-l); }
-    .bio__img { height: auto; aspect-ratio: 4 / 5; max-width: 88%; margin-inline: auto; }
+    .bio__grid { grid-template-columns: 1fr; gap: var(--space-m); }
+    .bio__img { max-width: 62%; aspect-ratio: 4 / 5; }
+  }
+  @media (max-width: 560px) {
+    .bio__img { max-width: 78%; }
   }
 </style>
