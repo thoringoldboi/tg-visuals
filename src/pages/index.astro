@@ -32,8 +32,8 @@ const videoThumb = filmId ? `https://i.ytimg.com/vi/${filmId}/maxresdefault.jpg`
 
     <a href="#work" class="hero__cta" aria-label="View work">
       <span class="hero__cta-circle" aria-hidden="true">
-        <svg viewBox="0 0 24 24" width="19" height="19">
-          <path d="M12 5v13M6 12.5l6 6 6-6" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+        <svg viewBox="0 0 24 24" width="15" height="15">
+          <path d="M12 5v13M6 12.5l6 6 6-6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
         </svg>
       </span>
       <span class="hero__cta-label">View Work</span>
@@ -176,7 +176,7 @@ const videoThumb = filmId ? `https://i.ytimg.com/vi/${filmId}/maxresdefault.jpg`
     z-index: 3;
     display: inline-flex;
     align-items: center;
-    gap: 0.9em;
+    gap: 0.7em;
     color: #fff;
     white-space: nowrap;
     animation: ctaBlurIn 1.3s var(--ease-out) 0.9s both;
@@ -188,8 +188,8 @@ const videoThumb = filmId ? `https://i.ytimg.com/vi/${filmId}/maxresdefault.jpg`
   }
   .hero__cta-circle {
     flex: none;
-    width: clamp(46px, 4vw, 56px);
-    height: clamp(46px, 4vw, 56px);
+    width: clamp(36px, 3vw, 44px);
+    height: clamp(36px, 3vw, 44px);
     display: grid;
     place-items: center;
     border: 1px solid rgba(255, 255, 255, 0.5);
@@ -205,8 +205,8 @@ const videoThumb = filmId ? `https://i.ytimg.com/vi/${filmId}/maxresdefault.jpg`
   }
   .hero__cta-label {
     font-family: var(--font-display);
-    font-weight: 400;
-    font-size: clamp(1.05rem, 0.9rem + 0.7vw, 1.5rem);
+    font-weight: 500;
+    font-size: clamp(0.82rem, 0.74rem + 0.35vw, 1.05rem);
     letter-spacing: 0.01em;
   }
   @keyframes ctaBob {
